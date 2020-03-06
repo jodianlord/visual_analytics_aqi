@@ -80,4 +80,6 @@ for entry in os.scandir(directory):
             writerow[master_city_index] = city
             writerow[master_country_index] = country
             #print("Written Row: ", writerow)
-            citywriter.writerow(writerow)
+            writerow_cleaned = ['0' if x is None else x for x in writerow]
+            writerow_cleaned = ['0' if x is '' else x for x in writerow_cleaned]
+            citywriter.writerow(writerow_cleaned)
