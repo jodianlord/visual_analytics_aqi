@@ -8,6 +8,7 @@
 #
 
 library(shiny)
+library(ggplot2)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -17,7 +18,7 @@ ui <- fluidPage(
     
     # Show a plot of the generated distribution
     mainPanel(
-       plotOutput("airquality")
+       plotOutput("singaporeplot")
     )
     
 )
@@ -25,8 +26,8 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
     
-   # cities = read.csv('all_cities.csv')
-    #str(cities)
+    cities = read.csv('all_cities.csv')
+    singapore <- subset(cities, city='singapore')
 
     output$distPlot <- renderPlot({
         # generate bins based on input$bins from ui.R
@@ -38,13 +39,14 @@ server <- function(input, output) {
     })
     
     output$airquality <- renderPlot(({
-        library(ggplot2)
-        cities = read.csv('all_cities.csv')
-        singapore <- subset(cities, city='singapore')
         str(singapore)
         ggplot(singapore, aes(x=date, y=pm25)) +
             geom_point()
     }))
+    
+    output$singaporeplot <- renderPlot({
+        plot(singapore$pm25, singapore$pm10)
+    })
 }
 
 # Run the application 
