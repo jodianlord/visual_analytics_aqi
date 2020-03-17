@@ -1,6 +1,25 @@
+library(plotly)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(knitr)
+
+world <- ne_countries(scale = "medium", returnclass = "sf")
+
 map_visualise <- function(input, output, data){
+  output$mapplot <- renderPlotly({
+    ggplot(data=world) + 
+      geom_sf()
+  })
+  
+}
+
+show_table <- function(input, output, data){
+  output$show_table <- DT::renderDT(data)
+}
+
+pollutant_visualise <- function(input, output, data){
   #Output a line plot of PM25 vs month
-  output$singaporeplot <- renderPlot({
+  output$singaporeplot <- renderPlotly({
     ggplot(data, aes(x=month)) +
       ggtitle("Average PM25 and PM10 levels over Months") +
       xlab("Date") + ylab("Pollutant Levels") + 
@@ -10,3 +29,4 @@ map_visualise <- function(input, output, data){
       geom_line(aes(y=totalpm10), color="blue")
   })
 }
+

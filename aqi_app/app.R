@@ -3,11 +3,13 @@ library(ggplot2)
 library(dplyr)
 library(lubridate)
 library(scales)
-source("load_data.R")
+library(plotly)
+library(knitr)
+source("load_new_data.R")
 source("maps.R")
 
-cities = load_dataset('all_cities.csv')
-singapore <- subset(cities, city='singapore')
+cities = load_dataset()
+str(cities)
 
 ui <- fluidPage(
 
@@ -16,14 +18,16 @@ ui <- fluidPage(
     
     # Show a plot of the generated distribution
     mainPanel(
-       plotOutput("singaporeplot")
+        #plotlyOutput("mapplot"),
+        DT::dataTableOutput("show_table")
     )
     
 )
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
-    map_visualise(input, output, singapore)
+    #map_visualise(input, output, cities)
+    show_table(input, output, cities)
 }
 
 # Run the application 
