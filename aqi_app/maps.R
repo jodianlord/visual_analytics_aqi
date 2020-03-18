@@ -4,8 +4,9 @@ library(rnaturalearthdata)
 library(knitr)
 
 #world <- ne_countries(scale = "medium", returnclass = "sf")
-
 map_visualise <- function(input, output, data){
+  data <- subset(data, Year == "2000")
+  data <- subset(data, Variable == "Mean population exposure to PM2.5")
   output$mapplot <- renderPlotly({
     ggplot(data, aes(x = long, y = lat, group = group )) +
       geom_polygon(aes(fill = Value))

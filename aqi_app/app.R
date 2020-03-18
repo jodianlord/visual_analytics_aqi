@@ -19,7 +19,7 @@ ui <- fluidPage(
     
     # Show a plot of the generated distribution
     mainPanel(
-        #DT::dataTableOutput("show_table"),
+        DT::dataTableOutput("show_table"),
         plotlyOutput("mapplot")
         #DT::dataTableOutput("mapset")
     )
@@ -29,7 +29,7 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
     map_visualise(input, output, cities)
-    #show_table(input, output, cities)
+    show_table(input, output, cities)
     #show_mapset(input, output, maps)
 }
 

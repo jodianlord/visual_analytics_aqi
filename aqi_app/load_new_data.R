@@ -2,9 +2,9 @@ map_world = map_data('world')
 load_dataset <- function(){
   countries = read.csv('data/EXP_PM2_5_14032020074440630.csv', stringsAsFactors = FALSE)
   
-  countries <- subset(countries, Year == "2000")
-  countries <- subset(countries, Variable == "Mean population exposure to PM2.5")
-  countries <- mutate(countries, Year=as.Date(ISOdate(Year, 1, 1)))
+  #countries <- subset(countries, Year == "2000")
+  #countries <- subset(countries, Variable == "Mean population exposure to PM2.5")
+  #countries <- mutate(countries, Year=as.Date(ISOdate(Year, 1, 1)))
   countries <- subset(countries, Macroregion == '-Total-')
   countries <- dplyr::select(countries, Country, Variable, Year, Unit, Value)
   countries <- subset(countries, !(Country %in% c("G7", "World", "ASEAN", "G20", 
