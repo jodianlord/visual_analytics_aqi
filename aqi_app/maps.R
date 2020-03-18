@@ -7,8 +7,8 @@ world <- ne_countries(scale = "medium", returnclass = "sf")
 
 map_visualise <- function(input, output, data){
   output$mapplot <- renderPlotly({
-    ggplot(data=world) + 
-      geom_sf()
+    ggplot(data, aes(x = long, y = lat, group = group )) +
+      geom_polygon(aes(fill = Value))
   })
   
 }

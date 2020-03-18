@@ -2,7 +2,8 @@ map_world = map_data('world')
 load_dataset <- function(){
   countries = read.csv('data/EXP_PM2_5_14032020074440630.csv', stringsAsFactors = FALSE)
   
-  
+  countries <- subset(countries, Year == "2000")
+  countries <- subset(countries, Variable == "Mean population exposure to PM2.5")
   countries <- mutate(countries, Year=as.Date(ISOdate(Year, 1, 1)))
   countries <- subset(countries, Macroregion == '-Total-')
   countries <- dplyr::select(countries, Country, Variable, Year, Unit, Value)
@@ -31,8 +32,9 @@ load_dataset <- function(){
                                                 'Trinidad and Tobago' = 'Trinidad',
                                                 'Viet Nam' = 'Vietnam'))
   #countries <- anti_join(countries, map_world, by = c('Country' = 'region'))
-  countries <- merge(countries, map_world, by.x = "Country", by.y = "region")
-  write.csv(countries, "data/pollutant_with_coordinates.csv", row.names = FALSE)
+  #countries <- merge(countries, map_world, by.x = "Country", by.y = "region")
+  countries <- right_join(map_world, countries, by=c('region' = 'Country'))
+  #write.csv(countries, "data/pollutant_with_coordinates.csv", row.names = FALSE)
   return(countries)
 }
 
