@@ -1,11 +1,10 @@
 # Import packages
-library('tidyverse')
+library(ggplot2)
 
-# Import data
-df = read_csv('all_cities.csv')
-
-# Plot time series
-ggplot(data = df, aes(date, pm25)) +
-  geom_line() +
-  xlab('Date') +
-  ylab('pm25')
+# Visualise Prepost graph
+prepost_visualise = function(input, output, cities, policies) {
+  output$prepostplot = renderPlotly({
+    ggplot(cities, aes(x = long, y = lat, group = group )) +
+      geom_polygon(aes(fill = Value))
+  })
+}

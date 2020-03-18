@@ -7,6 +7,7 @@ library(plotly)
 library(knitr)
 source("load_new_data.R")
 source("maps.R")
+source('viz2_pre_post.R')
 
 cities = load_dataset()
 maps = load_maps()
@@ -29,6 +30,7 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
     map_visualise(input, output, cities)
+    prepost_visualise(input, output, cities, FALSE)
     #show_table(input, output, cities)
     #show_mapset(input, output, maps)
 }
