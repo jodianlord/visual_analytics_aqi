@@ -3,8 +3,15 @@ library(ggplot2)
 library(dplyr)
 library(lubridate)
 library(scales)
+library(plotly)
+library(knitr)
+source("load_new_data.R")
+source("maps.R")
 
-# Define UI for application
+cities = load_dataset()
+maps = load_maps()
+str(cities)
+
 ui <- fluidPage(
 
     # Application title
@@ -12,40 +19,18 @@ ui <- fluidPage(
     
     # Show a plot of the generated distribution
     mainPanel(
-       plotOutput("singaporeplot")
+        #DT::dataTableOutput("show_table"),
+        plotlyOutput("mapplot")
+        #DT::dataTableOutput("mapset")
     )
     
 )
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
-    #Read CSV File
-    cities = read.csv('all_cities.csv', stringsAsFactors = FALSE)
-    
-    #Format the dates
-    cities_transformed <- mutate(cities, date=as.Date(date, format="%Y/%m/%d"))
-    
-    #Group data by month, take the mean
-    cities_grouped <- cities_transformed %>%
-        group_by(month=floor_date(date, "month")) %>%
-        summarise(totalpm25 = mean(pm25), totalpm10 = mean(pm10))
-    
-    #Assign the Singapore data subset
-    str(cities_transformed)
-    singapore <- subset(cities_grouped, city='singapore')
-    
-    
-    
-    #Output a line plot of PM25 vs month
-    output$singaporeplot <- renderPlot({
-        ggplot(singapore, aes(x=month)) +
-            ggtitle("Average PM25 and PM10 levels over Months") +
-            xlab("Date") + ylab("Pollutant Levels") + 
-            scale_x_date(date_breaks = "1 month", date_labels =  "%b %Y") +
-            theme(axis.text.x=element_text(angle=60, hjust=1)) +
-            geom_line(aes(y=totalpm25), color="red") +
-            geom_line(aes(y=totalpm10), color="blue")
-    })
+    map_visualise(input, output, cities)
+    #show_table(input, output, cities)
+    #show_mapset(input, output, maps)
 }
 
 # Run the application 
