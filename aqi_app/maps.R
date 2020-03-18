@@ -14,7 +14,7 @@ map_visualise <- function(input, output, data){
 }
 
 show_mapset <- function(input, output, data){
-  data <- unique(data[5])
+  #data <- unique(data[5])
   output$mapset <- DT::renderDT(data)
 }
 

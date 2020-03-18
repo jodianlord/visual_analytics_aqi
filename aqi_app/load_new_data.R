@@ -30,7 +30,9 @@ load_dataset <- function(){
                                                 'Syrian Arab Republic' = 'Syria',
                                                 'Trinidad and Tobago' = 'Trinidad',
                                                 'Viet Nam' = 'Vietnam'))
-  countries <- anti_join(countries, map_world, by = c('Country' = 'region'))
+  #countries <- anti_join(countries, map_world, by = c('Country' = 'region'))
+  countries <- merge(countries, map_world, by.x = "Country", by.y = "region")
+  write.csv(countries, "data/pollutant_with_coordinates.csv", row.names = FALSE)
   return(countries)
 }
 
