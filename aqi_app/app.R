@@ -12,7 +12,6 @@ source('viz2_pre_post.R')
 # Load datasets
 cities = load_dataset()
 maps = load_maps()
-str(cities)
 
 # Map panel
 map_panel <- tabPanel(
@@ -20,14 +19,15 @@ map_panel <- tabPanel(
     sidebarLayout(
         # Inputs
         sidebarPanel(
-            'TODO'
+            textInput("date_range", "Date", value="2000"),
+            textInput("pollutant", "Pollutant", value="Mean population exposure to PM2.5")
         ),
         
-        # Outputs
+        # Output: Show a plot of the generated distribution
         mainPanel(
-            DT::dataTableOutput("show_table"),
-            plotlyOutput("mapplot")
-            #DT::dataTableOutput("mapset")
+            tabsetPanel(type = "tabs",
+                        tabPanel("Map", plotlyOutput("mapplot")),
+                        tabPanel("Table", DT::dataTableOutput("show_table")))
         ),
         
         # sidebar position
@@ -90,7 +90,6 @@ server <- function(input, output) {
     map_visualise(input, output, cities)
     prepost_visualise(input, output, cities, FALSE)
     show_table(input, output, cities)
-    #show_mapset(input, output, maps)
 }
 
 # Run the application 
