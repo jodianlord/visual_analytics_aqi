@@ -3,7 +3,7 @@ library(rnaturalearth)
 library(rnaturalearthdata)
 library(knitr)
 
-world <- ne_countries(scale = "medium", returnclass = "sf")
+#world <- ne_countries(scale = "medium", returnclass = "sf")
 
 map_visualise <- function(input, output, data){
   output$mapplot <- renderPlotly({
