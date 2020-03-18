@@ -9,6 +9,7 @@ source("load_new_data.R")
 source("maps.R")
 
 cities = load_dataset()
+maps = load_maps()
 str(cities)
 
 ui <- fluidPage(
@@ -19,7 +20,8 @@ ui <- fluidPage(
     # Show a plot of the generated distribution
     mainPanel(
         #plotlyOutput("mapplot"),
-        DT::dataTableOutput("show_table")
+        DT::dataTableOutput("show_table"),
+        DT::dataTableOutput("mapset")
     )
     
 )
@@ -28,6 +30,7 @@ ui <- fluidPage(
 server <- function(input, output) {
     #map_visualise(input, output, cities)
     show_table(input, output, cities)
+    show_mapset(input, output, maps)
 }
 
 # Run the application 

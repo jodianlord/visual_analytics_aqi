@@ -13,6 +13,11 @@ map_visualise <- function(input, output, data){
   
 }
 
+show_mapset <- function(input, output, data){
+  data <- unique(data[5])
+  output$mapset <- DT::renderDT(data)
+}
+
 show_table <- function(input, output, data){
   output$show_table <- DT::renderDT(data)
 }
