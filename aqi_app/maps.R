@@ -3,6 +3,7 @@ library(rnaturalearth)
 library(rnaturalearthdata)
 library(knitr)
 
+# takes in the data, filters it by input and displays a map shaded with the data.
 map_visualise <- function(input, output, data){
   output$mapplot <- renderPlotly({
     year_tosubset = input$date_range
@@ -15,6 +16,7 @@ map_visualise <- function(input, output, data){
   })
 }
 
+# displays a table filtered by input.
 show_table <- function(input, output, data){
   output$show_table <- DT::renderDT({
     year_tosubset = input$date_range
