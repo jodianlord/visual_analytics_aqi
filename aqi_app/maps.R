@@ -3,24 +3,26 @@ library(rnaturalearth)
 library(rnaturalearthdata)
 library(knitr)
 
-#world <- ne_countries(scale = "medium", returnclass = "sf")
 map_visualise <- function(input, output, data){
-  data <- subset(data, Year == "2000")
-  data <- subset(data, Variable == "Mean population exposure to PM2.5")
   output$mapplot <- renderPlotly({
+    year_tosubset = input$date_range
+    pollutant_tosubset = input$pollutant
+    data <- subset(data, Year == year_tosubset)
+    data <- subset(data, Variable == pollutant_tosubset)
+    
     ggplot(data, aes(x = long, y = lat, group = group )) +
       geom_polygon(aes(fill = Value))
   })
-  
-}
-
-show_mapset <- function(input, output, data){
-  #data <- unique(data[5])
-  output$mapset <- DT::renderDT(data)
 }
 
 show_table <- function(input, output, data){
-  output$show_table <- DT::renderDT(data)
+  output$show_table <- DT::renderDT({
+    year_tosubset = input$date_range
+    pollutant_tosubset = input$pollutant
+    data <- subset(data, Year == year_tosubset)
+    data <- subset(data, Variable == pollutant_tosubset)
+    return(data)
+  })
 }
 
 pollutant_visualise <- function(input, output, data){

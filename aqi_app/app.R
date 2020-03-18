@@ -10,18 +10,22 @@ source("maps.R")
 
 cities = load_dataset()
 maps = load_maps()
-str(cities)
 
 ui <- fluidPage(
 
     # Application title
     titlePanel("AQI Index"),
     
+    sidebarPanel(
+        textInput("date_range", "Date", value="2000"),
+        textInput("pollutant", "Pollutant", value="Mean population exposure to PM2.5")
+    ),
+    
     # Show a plot of the generated distribution
     mainPanel(
-        DT::dataTableOutput("show_table"),
-        plotlyOutput("mapplot")
-        #DT::dataTableOutput("mapset")
+        tabsetPanel(type = "tabs",
+                    tabPanel("Map", plotlyOutput("mapplot")),
+                    tabPanel("Table", DT::dataTableOutput("show_table")))
     )
     
 )
@@ -30,7 +34,6 @@ ui <- fluidPage(
 server <- function(input, output) {
     map_visualise(input, output, cities)
     show_table(input, output, cities)
-    #show_mapset(input, output, maps)
 }
 
 # Run the application 
