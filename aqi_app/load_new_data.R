@@ -41,3 +41,24 @@ load_dataset <- function(){
 load_maps <- function(){
   return(map_world)
 }
+
+load_policies <- function() {
+  policies <- readxl::read_xlsx('data/policies.xlsx')
+  return(policies)
+}
+
+load_pollution <- function() {
+  countries <- load_dataset()
+  df <- subset(countries, countries$Variable == "Mean population exposure to PM2.5")
+  df <- df[, !names(df) %in% c(
+    'lat',
+    'long',
+    'group',
+    'order',
+    'subregion',
+    'Variable',
+    'Unit'
+  )]
+  df <- aggregate(cbind(value=df$Value), list(region = df$region, year = df$Year), mean)
+  return(df)
+}

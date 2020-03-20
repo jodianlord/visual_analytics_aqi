@@ -10,8 +10,10 @@ source("maps.R")
 source('viz2_pre_post.R')
 
 # Load datasets
-cities = load_dataset()
+countries = load_dataset()
 maps = load_maps()
+policies = load_policies()
+pollution = load_pollution()
 
 # Map panel
 map_panel <- tabPanel(
@@ -37,17 +39,37 @@ map_panel <- tabPanel(
   
 
 # Policy effectivenes panel
+# default_start_date <- as.Date('1990', '%Y')
+# default_end_date <- as.Date('2020', '%Y')
 policy_effectiveness_panel <- tabPanel(
     'Policy Effectiveness',
     sidebarLayout(
         # Inputs
         sidebarPanel(
-            'TODO'
+            selectizeInput(
+                'country',
+                'Country',
+                unique(subset(pollution, pollution$region %in% policies$country)$region)
+            ),
+            # dateRangeInput(
+            #     'date_range',
+            #     'Date Range',
+            #     min = default_start_date,
+            #     max = default_end_date,
+            #     start = default_start_date,
+            #     end = default_end_date,
+            #     format = 'yyyy',
+            #     startview = 'year'
+            # ),
+            checkboxGroupInput(
+                'policies_selected',
+                'Policies'
+            )
         ),
         
         # Outputs
         mainPanel(
-            'TODO'
+          plotlyOutput('prepostplot')
         ),
         
         # sidebar position
@@ -86,10 +108,23 @@ ui <- navbarPage(
 )
 
 # Define server logic required to draw a histogram
-server <- function(input, output) {
-    map_visualise(input, output, cities)
-    prepost_visualise(input, output, cities, FALSE)
-    show_table(input, output, cities)
+server <- function(input, output, session) {
+    map_visualise(input, output, countries)
+    prepost_visualise(input, output, pollution, policies)
+    show_table(input, output, countries)
+    
+    # Update input policies shown based on other inputs
+    observe({
+      policies_subset <- subset(policies, country == input$country)
+      choices <- unique(policies_subset$policy_name)
+      updateCheckboxGroupInput(
+        session,
+        'policies_selected',
+        label = 'Policies',
+        choices = choices,
+        selected = choices
+      )
+    })
 }
 
 # Run the application 
