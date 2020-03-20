@@ -5,6 +5,7 @@ library(knitr)
 
 # takes in the data, filters it by input and displays a map shaded with the data.
 map_visualise <- function(input, output, data){
+  # CONSIDER USING TMAP
   output$mapplot <- renderPlotly({
     year_tosubset = input$date_range
     pollutant_tosubset = input$pollutant
