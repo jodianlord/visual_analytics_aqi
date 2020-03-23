@@ -31,9 +31,8 @@ map_panel <- tabPanel(
         # Output: Show a plot of the generated distribution
         mainPanel(
             tabsetPanel(type = "tabs",
-                        tabPanel("Table", DT::dataTableOutput("show_table"))
-                        #tabPanel("Tmap", leafletOutput("tmapplot"))
-                        )
+                        tabPanel("Table", DT::dataTableOutput("show_table")),
+                        tabPanel("Tmap", leafletOutput("tmapplot")))
         ),
         
         # sidebar position

@@ -14,9 +14,13 @@ map_visualise <- function(input, output, data){
 
 map_tmap <- function(input, output, data){
   output$tmapplot <- renderLeaflet({
-    data("World")
-    map <- tm_shape(World) + 
-      tm_polygons("HPI")
+    year_tosubset = input$date_range
+    pollutant_tosubset = input$pollutant
+    data <- subset(data, Year == year_tosubset)
+    data <- subset(data, Variable == pollutant_tosubset)
+    
+    map <- tm_shape(data) + 
+      tm_polygons("Value")
     tmap_leaflet(map)
   })
 }
