@@ -20,7 +20,7 @@ map_tmap <- function(input, output, data){
     data <- subset(data, Variable == pollutant_tosubset)
     
     map <- tm_shape(data) + 
-      tm_polygons("Value")
+      tm_polygons("Value", title="Pollutants")
     tmap_leaflet(map)
   })
 }
