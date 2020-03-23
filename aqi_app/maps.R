@@ -32,6 +32,7 @@ show_table <- function(input, output, data){
     pollutant_tosubset = input$pollutant
     data <- subset(data, Year == year_tosubset)
     data <- subset(data, Variable == pollutant_tosubset)
+  
     return(data)
   })
 }

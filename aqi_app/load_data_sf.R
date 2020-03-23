@@ -32,9 +32,14 @@ load_dataset <- function(){
   countries <- right_join(world_geometry, countries, by=c('sovereignt' = 'Country'))
   
   colnames(countries)[1] <- "Country"
-
-  #countries <- right_join(map_world, countries, by=c('region' = 'Country'))
-  #write.csv(countries, "data/pollutant_with_coordinates.csv", row.names = FALSE)
+  
+  #GDP per capita (constant 2000 US$)
+  GDP_data = WDI(indicator='NY.GDP.PCAP.KD', start=1990, end=2020)
+  GDP_data <- dplyr::select(GDP_data, country, year, NY.GDP.PCAP.KD)
+  countries <- left_join(countries, GDP_data, by=c('Country' = 'country', 'Year' = 'year'))
+  
+  colnames(countries)[6] <- "GDP_Per_Capita"
+  
   return(countries)
 }
 
