@@ -31,6 +31,7 @@ load_dataset <- function(){
   
   countries <- right_join(world_geometry, countries, by=c('sovereignt' = 'Country'))
   
+  colnames(countries)[1] <- "Country"
 
   #countries <- right_join(map_world, countries, by=c('region' = 'Country'))
   #write.csv(countries, "data/pollutant_with_coordinates.csv", row.names = FALSE)

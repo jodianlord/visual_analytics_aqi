@@ -24,10 +24,10 @@ map_tmap <- function(input, output, data){
 # displays a table filtered by input.
 show_table <- function(input, output, data){
   output$show_table <- DT::renderDT({
-    #year_tosubset = input$date_range
-    #pollutant_tosubset = input$pollutant
-    #data <- subset(data, Year == year_tosubset)
-    #data <- subset(data, Variable == pollutant_tosubset)
+    year_tosubset = input$date_range
+    pollutant_tosubset = input$pollutant
+    data <- subset(data, Year == year_tosubset)
+    data <- subset(data, Variable == pollutant_tosubset)
     return(data)
   })
 }
