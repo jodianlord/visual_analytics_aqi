@@ -18,14 +18,17 @@ countries = load_dataset()
 policies = load_policies()
 #pollution = load_pollution()
 
+year_list <- unique(countries$Year)
+variable_list <- unique(countries$Variable)
+
 # Map panel
 map_panel <- tabPanel(
     'Map',
     sidebarLayout(
         # Inputs
         sidebarPanel(
-            textInput("date_range", "Date", value="2000"),
-            textInput("pollutant", "Pollutant", value="Mean population exposure to PM2.5")
+            selectInput("date_range", "Date:", year_list),
+            selectInput("pollutant", "Pollutant: ", variable_list)
         ),
         
         # Output: Show a plot of the generated distribution
