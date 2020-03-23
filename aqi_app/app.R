@@ -5,15 +5,18 @@ library(lubridate)
 library(scales)
 library(plotly)
 library(knitr)
-source("load_new_data.R")
+library(tmap)
+library(WDI)
+library(sf)
+library(leaflet)
+source("load_data_sf.R")
 source("maps.R")
 source('viz2_pre_post.R')
 
 # Load datasets
 countries = load_dataset()
-maps = load_maps()
 policies = load_policies()
-pollution = load_pollution()
+#pollution = load_pollution()
 
 # Map panel
 map_panel <- tabPanel(
@@ -28,15 +31,15 @@ map_panel <- tabPanel(
         # Output: Show a plot of the generated distribution
         mainPanel(
             tabsetPanel(type = "tabs",
-                        tabPanel("Map", plotlyOutput("mapplot")),
-                        tabPanel("Table", DT::dataTableOutput("show_table")))
+                        tabPanel("Table", DT::dataTableOutput("show_table"))
+                        #tabPanel("Tmap", leafletOutput("tmapplot"))
+                        )
         ),
         
         # sidebar position
         position = 'right'
     )
 )
-  
 
 # Policy effectivenes panel
 # default_start_date <- as.Date('1990', '%Y')
@@ -46,11 +49,11 @@ policy_effectiveness_panel <- tabPanel(
     sidebarLayout(
         # Inputs
         sidebarPanel(
-            selectizeInput(
-                'country',
-                'Country',
-                unique(subset(pollution, pollution$region %in% policies$country)$region)
-            ),
+            #selectizeInput(
+            #    'country',
+            #    'Country',
+            #    unique(subset(pollution, pollution$region %in% policies$country)$region)
+            #),
             # dateRangeInput(
             #     'date_range',
             #     'Date Range',
@@ -69,7 +72,7 @@ policy_effectiveness_panel <- tabPanel(
         
         # Outputs
         mainPanel(
-          plotlyOutput('prepostplot')
+            plotlyOutput('prepostplot')
         ),
         
         # sidebar position
@@ -110,7 +113,8 @@ ui <- navbarPage(
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
     map_visualise(input, output, countries)
-    prepost_visualise(input, output, pollution, policies)
+    map_tmap(input, output, countries)
+    #prepost_visualise(input, output, pollution, policies)
     show_table(input, output, countries)
     
     # Update input policies shown based on other inputs

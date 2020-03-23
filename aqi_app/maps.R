@@ -1,8 +1,3 @@
-library(plotly)
-library(rnaturalearth)
-library(rnaturalearthdata)
-library(knitr)
-
 # takes in the data, filters it by input and displays a map shaded with the data.
 map_visualise <- function(input, output, data){
   # CONSIDER USING TMAP
@@ -17,13 +12,22 @@ map_visualise <- function(input, output, data){
   })
 }
 
+map_tmap <- function(input, output, data){
+  output$tmapplot <- renderLeaflet({
+    data("World")
+    map <- tm_shape(World) + 
+      tm_polygons("HPI")
+    tmap_leaflet(map)
+  })
+}
+
 # displays a table filtered by input.
 show_table <- function(input, output, data){
   output$show_table <- DT::renderDT({
-    year_tosubset = input$date_range
-    pollutant_tosubset = input$pollutant
-    data <- subset(data, Year == year_tosubset)
-    data <- subset(data, Variable == pollutant_tosubset)
+    #year_tosubset = input$date_range
+    #pollutant_tosubset = input$pollutant
+    #data <- subset(data, Year == year_tosubset)
+    #data <- subset(data, Variable == pollutant_tosubset)
     return(data)
   })
 }
