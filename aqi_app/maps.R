@@ -20,7 +20,10 @@ map_tmap <- function(input, output, data){
     data <- subset(data, Variable == pollutant_tosubset)
     
     map <- tm_shape(data) + 
-      tm_polygons("Value", title="Pollutants")
+      tm_polygons("GDP_Per_Capita", title="GDP Per Capita") +
+      tm_shape(data) +
+      tm_bubbles(size="Value", id="pollutant", col="blue") +
+      tm_style_gray() + tm_format_World_wide()
     tmap_leaflet(map)
   })
 }
@@ -32,7 +35,6 @@ show_table <- function(input, output, data){
     pollutant_tosubset = input$pollutant
     data <- subset(data, Year == year_tosubset)
     data <- subset(data, Variable == pollutant_tosubset)
-  
     return(data)
   })
 }

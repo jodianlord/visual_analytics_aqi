@@ -36,9 +36,14 @@ load_dataset <- function(){
   #GDP per capita (constant 2000 US$)
   GDP_data = WDI(indicator='NY.GDP.PCAP.KD', start=1990, end=2020)
   GDP_data <- dplyr::select(GDP_data, country, year, NY.GDP.PCAP.KD)
+  GDP_data <- mutate(GDP_data, country=recode(country,
+                                              'United States' = 'United States of America',
+                                              'Russian Federation' = 'Russia'))
   countries <- left_join(countries, GDP_data, by=c('Country' = 'country', 'Year' = 'year'))
   
   colnames(countries)[6] <- "GDP_Per_Capita"
+  
+  #countries <- anti_join(GDP_data, countries, by = c('country' = 'Country'))
   
   return(countries)
 }
