@@ -1,7 +1,7 @@
 map_world = map_data('world')
 data("World")
 load_dataset <- function(){
-  countries = read.csv('data/EXP_PM2_5_14032020074440630.csv')
+  countries = read.csv('data/EXP_PM2_5_14032020074440630.csv', stringsAsFactors = FALSE)
   countries <- subset(countries, Macroregion == '-Total-')
   countries <- dplyr::select(countries, Country, Variable, Year, Unit, Value)
   countries <- mutate(countries, Country=recode(Country,
