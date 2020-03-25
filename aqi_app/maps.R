@@ -28,6 +28,16 @@ map_tmap <- function(input, output, data){
   })
 }
 
+line_country <- function(input, output, data){
+  output$linecountry <- renderPlotly({
+    country_tosubset = input$country_select
+    data <- subset(data, Country == country_tosubset)
+    ggplot(data) +
+      geom_line(aes(x=data$Year, y=data$GDP_Per_Capita)) +
+      geom_line(aes(x=data$Year, y=data$Value))
+  })
+}
+
 # displays a table filtered by input.
 show_table <- function(input, output, data){
   output$show_table <- DT::renderDT({

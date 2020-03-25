@@ -20,6 +20,7 @@ policies = load_policies()
 
 year_list <- unique(countries$Year)
 variable_list <- unique(countries$Variable)
+country_list <- unique(countries$Country)
 
 # Map panel
 map_panel <- tabPanel(
@@ -28,14 +29,16 @@ map_panel <- tabPanel(
         # Inputs
         sidebarPanel(
             selectInput("date_range", "Date:", year_list),
-            selectInput("pollutant", "Pollutant: ", variable_list)
+            selectInput("pollutant", "Pollutant: ", variable_list),
+            selectInput("country_select", "Country: ", country_list)
         ),
         
         # Output: Show a plot of the generated distribution
         mainPanel(
             tabsetPanel(type = "tabs",
                         tabPanel("Table", DT::dataTableOutput("show_table")),
-                        tabPanel("Tmap", leafletOutput("tmapplot")))
+                        tabPanel("Tmap", leafletOutput("tmapplot")),
+                        tabPanel("Country", plotlyOutput("linecountry")))
         ),
         
         # sidebar position
@@ -118,6 +121,7 @@ server <- function(input, output, session) {
     map_tmap(input, output, countries)
     #prepost_visualise(input, output, pollution, policies)
     show_table(input, output, countries)
+    line_country(input, output, countries)
     
     # Update input policies shown based on other inputs
     observe({
