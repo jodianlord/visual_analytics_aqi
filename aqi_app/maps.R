@@ -32,9 +32,13 @@ line_country <- function(input, output, data){
   output$linecountry <- renderPlotly({
     country_tosubset = input$country_select
     data <- subset(data, Country == country_tosubset)
+    pollutant_tosubset = input$pollutant
+    data <- subset(data, Variable == pollutant_tosubset)
+    scale <- mean(data$GDP_Per_Capita) / 10
     ggplot(data) +
-      geom_line(aes(x=data$Year, y=data$GDP_Per_Capita)) +
-      geom_line(aes(x=data$Year, y=data$Value))
+      geom_line(aes(x=data$Year, y=data$GDP_Per_Capita, col="blue")) +
+      geom_line(aes(x=data$Year, y=data$Value*scale, col="red")) +
+      scale_y_continuous(sec.axis= sec_axis(~./scale, name="AQI"))
   })
 }
 
