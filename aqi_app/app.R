@@ -96,7 +96,9 @@ gdp_aqi_panel <- tabPanel(
         
         # Outputs
         mainPanel(
-            'TODO'
+            tabsetPanel(type = "tabs",
+                        tabPanel("Boxplot", DT::dataTableOutput("show_table")),
+                        tabPanel("WIP", "TODO"))
         ),
         
         # sidebar position
