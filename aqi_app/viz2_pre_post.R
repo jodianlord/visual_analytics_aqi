@@ -5,7 +5,7 @@ library(ggplot2)
 prepost_visualise <- function(input, output, pollution, policies) {
   output$prepostplot = renderPlotly({
     # Get pollution for that country
-    pollution_sub <- subset(pollution, region == input$country)
+    pollution_sub <- subset(pollution, country == input$country)
     
     # Get policies for this country
     policies_sub <- subset(policies, policies$country == input$country  &
