@@ -12,6 +12,19 @@ map_visualise <- function(input, output, data){
   })
 }
 
+countries_scatterplot <- function(input, output, data){
+  output$scatter <- renderPlotly({
+    year_tosubset = input$date_range
+    pollutant_tosubset = input$pollutant
+    data <- subset(data, Year == year_tosubset)
+    data <- subset(data, Variable == pollutant_tosubset)
+    
+    ggplot(data, aes(x=Value, y=GDP_Per_Capita)) +
+      geom_point(size=3, col="red") +
+      geom_text(aes(label=Country))
+  })
+}
+
 map_tmap <- function(input, output, data){
   output$tmapplot <- renderLeaflet({
     year_tosubset = input$date_range
