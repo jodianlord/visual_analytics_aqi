@@ -1,31 +1,42 @@
-library(shiny)
-library(ggplot2)
-library(dplyr)
-library(lubridate)
-library(scales)
-library(plotly)
-library(knitr)
-library(tmap)
-library(WDI)
-library(sf)
-library(leaflet)
-library(reshape2)
+# Library imports
+packages = c(
+  'shiny', 
+  'ggplot2', 
+  'dplyr',
+  'lubridate',
+  'scales',
+  'plotly',
+  'knitr',
+  'tmap',
+  'WDI',
+  'sf',
+  'leaflet',
+  'reshape2'
+)
+for (p in packages) {
+  if(!require(p, character.only = T)) {
+    install.packages(p)
+  }
+  library(p, character.only = T)
+}
+
+# Local imports
 source("load_data_sf.R")
 source("maps.R")
 source('viz2_pre_post.R')
 source("boxplot.R")
 
+
 # Load datasets
 countries = load_dataset()
+pollution = load_pollution(countries)
 policies = load_policies()
-pollution = load_pollution()
 
 str(policies)
 
 year_list <- unique(countries$Year)
 variable_list <- unique(countries$Variable)
-country_list <- unique(countries$Country)
-policy_list <- unique(policies$policy_name)
+country_list <- unique(subset(pollution, pollution$country %in% policies$country)$country)
 
 # Map panel
 map_panel <- tabPanel(
@@ -74,10 +85,9 @@ policy_effectiveness_panel <- tabPanel(
                  format = 'yyyy',
                  startview = 'year'
              ),
-            selectizeInput(
+            checkboxGroupInput(
                 'policies_selected',
                 'Policies',
-                policy_list
             )
         ),
         
@@ -135,8 +145,8 @@ server <- function(input, output, session) {
     # Update input policies shown based on other inputs
     observe({
       policies_subset <- subset(policies, country == input$country)
-      choices <- unique(policy_list)
-      updateSelectizeInput(
+      choices <- unique(policies_subset$policy_name)
+      updateCheckboxGroupInput(
         session,
         'policies_selected',
         label = 'Policies',
