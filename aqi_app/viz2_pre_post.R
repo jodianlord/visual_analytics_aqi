@@ -11,21 +11,19 @@ prepost_visualise <- function(input, output, pollution, policies) {
     policies_sub <- subset(policies, policies$country == input$country  &
                              policies$policy_name %in% input$policies_selected)[, c('policy_name', 'date')]
     
+    # Plot
     get_vlines = function() {
       if (dim(policies_sub)[1] == 0) {
         return(NULL)
       }
       return(geom_vline(data=policies_sub, mapping=aes(xintercept=date), color="blue"))
     }
-    
     get_vline_labels = function() {
       if (dim(policies_sub)[1] == 0) {
         return(NULL)
       }
       return(geom_text(data=policies_sub, mapping=aes(x=date, y=0, label=policy_name), size=3, angle=90, vjust=-0.4, hjust=0))
     }
-    
-    # Plot
     ggplot(pollution_sub, aes(x=year, y=value)) +
       geom_line(colour='grey') +
       geom_point() +
