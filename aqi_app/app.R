@@ -48,11 +48,10 @@ map_panel <- tabPanel(
         
         # Output: Show a plot of the generated distribution
         mainPanel(
-            tabsetPanel(type = "tabs",
-                        tabPanel("Table", DT::dataTableOutput("show_table")),
-                        tabPanel("Tmap", leafletOutput("tmapplot")),
-                        tabPanel("Country", plotlyOutput("linecountry")),
-                        tabPanel("Scatter", plotlyOutput("scatter")))
+          #DT::dataTableOutput("show_table"),
+          leafletOutput("tmapplot"),
+          plotlyOutput("linecountry"),
+          plotlyOutput("scatter")
         ),
         
         # sidebar position
