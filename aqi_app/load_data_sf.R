@@ -61,14 +61,11 @@ load_pollution <- function() {
   countries <- load_dataset()
   df <- subset(countries, countries$Variable == "Mean population exposure to PM2.5")
   df <- df[, !names(df) %in% c(
-    'lat',
-    'long',
-    'group',
-    'order',
-    'subregion',
-    'Variable',
-    'Unit'
+    'geometry',
+    'GDP_Per_Capita',
+    'Unit',
+    'Variable'
   )]
-  df <- aggregate(cbind(value=df$Value), list(region = df$region, year = df$Year), mean)
+  df <- aggregate(cbind(value=df$Value), list(country = df$Country, year = df$Year), mean)
   return(df)
 }

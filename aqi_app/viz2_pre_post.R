@@ -5,7 +5,7 @@ library(ggplot2)
 prepost_visualise <- function(input, output, pollution, policies) {
   output$prepostplot = renderPlotly({
     # Get pollution for that country
-    pollution_sub <- subset(pollution, region == input$country)
+    pollution_sub <- subset(pollution, country == input$country)
     
     # Get policies for this country
     policies_sub <- subset(policies, policies$country == input$country  &
@@ -24,7 +24,8 @@ prepost_visualise <- function(input, output, pollution, policies) {
       }
       return(geom_text(data=policies_sub, mapping=aes(x=date, y=0, label=policy_name), size=3, angle=90, vjust=-0.4, hjust=0))
     }
-    
+    str("It still works up to here")
+    str(pollution_sub)
     # Plot
     ggplot(pollution_sub, aes(x=year, y=value)) +
       geom_line(colour='grey') +

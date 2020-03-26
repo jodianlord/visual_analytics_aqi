@@ -18,11 +18,14 @@ source("boxplot.R")
 # Load datasets
 countries = load_dataset()
 policies = load_policies()
-#pollution = load_pollution()
+pollution = load_pollution()
+
+str(policies)
 
 year_list <- unique(countries$Year)
 variable_list <- unique(countries$Variable)
 country_list <- unique(countries$Country)
+policy_list <- unique(policies$policy_name)
 
 # Map panel
 map_panel <- tabPanel(
@@ -49,31 +52,32 @@ map_panel <- tabPanel(
 )
 
 # Policy effectivenes panel
-# default_start_date <- as.Date('1990', '%Y')
-# default_end_date <- as.Date('2020', '%Y')
+default_start_date <- as.Date('1990', '%Y')
+default_end_date <- as.Date('2020', '%Y')
 policy_effectiveness_panel <- tabPanel(
     'Policy Effectiveness',
     sidebarLayout(
         # Inputs
         sidebarPanel(
-            #selectizeInput(
-            #    'country',
-            #    'Country',
-            #    unique(subset(pollution, pollution$region %in% policies$country)$region)
-            #),
-            # dateRangeInput(
-            #     'date_range',
-            #     'Date Range',
-            #     min = default_start_date,
-            #     max = default_end_date,
-            #     start = default_start_date,
-            #     end = default_end_date,
-            #     format = 'yyyy',
-            #     startview = 'year'
-            # ),
-            checkboxGroupInput(
+            selectizeInput(
+                'country',
+                'Country',
+                country_list
+            ),
+             dateRangeInput(
+                 'date_range',
+                 'Date Range',
+                 min = default_start_date,
+                 max = default_end_date,
+                 start = default_start_date,
+                 end = default_end_date,
+                 format = 'yyyy',
+                 startview = 'year'
+             ),
+            selectizeInput(
                 'policies_selected',
-                'Policies'
+                'Policies',
+                policy_list
             )
         ),
         
@@ -123,7 +127,7 @@ ui <- navbarPage(
 server <- function(input, output, session) {
     map_visualise(input, output, countries)
     map_tmap(input, output, countries)
-    #prepost_visualise(input, output, pollution, policies)
+    prepost_visualise(input, output, pollution, policies)
     show_table(input, output, countries)
     line_country(input, output, countries)
     generate_boxplot(input, output, countries)
@@ -131,8 +135,8 @@ server <- function(input, output, session) {
     # Update input policies shown based on other inputs
     observe({
       policies_subset <- subset(policies, country == input$country)
-      choices <- unique(policies_subset$policy_name)
-      updateCheckboxGroupInput(
+      choices <- unique(policy_list)
+      updateSelectizeInput(
         session,
         'policies_selected',
         label = 'Policies',
