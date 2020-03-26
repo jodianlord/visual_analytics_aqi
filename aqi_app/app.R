@@ -50,7 +50,7 @@ map_panel <- tabPanel(
         mainPanel(
           #DT::dataTableOutput("show_table"),
           leafletOutput("tmapplot"),
-          plotlyOutput("linecountry"),
+          #plotlyOutput("linecountry"),
           plotlyOutput("scatter")
         ),
         

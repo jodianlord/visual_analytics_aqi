@@ -19,9 +19,12 @@ countries_scatterplot <- function(input, output, data){
     data <- subset(data, Year == year_tosubset)
     data <- subset(data, Variable == pollutant_tosubset)
     
-    ggplot(data, aes(x=Value, y=GDP_Per_Capita)) +
-      geom_point(size=3, col="red") +
-      geom_text(aes(label=Country))
+    ggplot(data, aes(x=Value, y=GDP_Per_Capita, text = paste("Country: ", Country))) +
+      geom_point(size=3, col="grey") +
+      #geom_text(aes(label=Country)) + 
+      geom_vline(xintercept = 50) + geom_hline(yintercept = 35000) +
+      xlab("Pollutant Level") + ylab("GDP Per Capita") +
+      theme_minimal()
   })
 }
 
