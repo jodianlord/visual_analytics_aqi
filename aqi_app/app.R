@@ -9,9 +9,11 @@ library(tmap)
 library(WDI)
 library(sf)
 library(leaflet)
+library(reshape2)
 source("load_data_sf.R")
 source("maps.R")
 source('viz2_pre_post.R')
+source("boxplot.R")
 
 # Load datasets
 countries = load_dataset()
@@ -97,7 +99,7 @@ gdp_aqi_panel <- tabPanel(
         # Outputs
         mainPanel(
             tabsetPanel(type = "tabs",
-                        tabPanel("Boxplot", DT::dataTableOutput("show_table")),
+                        tabPanel("Boxplot", plotOutput("gdpaqi_boxplot")),
                         tabPanel("WIP", "TODO"))
         ),
         
@@ -124,6 +126,7 @@ server <- function(input, output, session) {
     #prepost_visualise(input, output, pollution, policies)
     show_table(input, output, countries)
     line_country(input, output, countries)
+    generate_boxplot(input, output, countries)
     
     # Update input policies shown based on other inputs
     observe({
