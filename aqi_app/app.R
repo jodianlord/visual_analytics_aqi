@@ -42,44 +42,47 @@ country_list <- unique(countries$Country)
 
 # Create UI
 ui <- fluidPage(
-    # Application title
-    titlePanel("AQI Index"),
-    tabsetPanel(
-      tabPanel('World Overview',
-        sidebarLayout(
-          # Inputs
-          sidebarPanel(
-            selectInput("date_range", "Date:", year_list),
-            selectInput("pollutant", "Pollutant: ", variable_list)
-          ),
-          # Output: Show a plot of the generated distribution
-          mainPanel(
-            h1("AQI vs GDP Per Capita Worldwide"),
-            fluidRow(uiOutput("syncedmaps")),
-            h1("GDP Per Capita vs Pollutant Levels Per Country"),
-            plotOutput("scatter")
-          )
+  # Application title
+  titlePanel("AQI Index"),
+  tabsetPanel(
+    tabPanel('World Overview',
+      sidebarLayout(
+        # Inputs
+        sidebarPanel(
+          selectInput("date_range", "Date:", year_list),
+          selectInput("pollutant", "Pollutant: ", variable_list)
+        ),
+        # Output: Show a plot of the generated distribution
+        mainPanel(
+          h1("AQI vs GDP Per Capita Worldwide"),
+          fluidRow(uiOutput("syncedmaps")),
+          h1("GDP Per Capita vs Pollutant Levels Per Country"),
+          plotOutput("scatter")
         )
-      ),
-      tabPanel('Country Specific',
-        sidebarLayout(
-          sidebarPanel(
-            selectInput("date_range", "Date:", year_list),
-            selectInput("pollutant", "Pollutant: ", variable_list),
-            selectInput("country_select", "Country: ", country_list)
-          ),
-          mainPanel(
-            h1("AQI vs GDP Comparison")
-          )
-        )         
       )
+    ),
+    tabPanel('Country Specific',
+      sidebarLayout(
+        sidebarPanel(
+          selectInput("date_range", "Date:", year_list),
+          selectInput("pollutant", "Pollutant: ", variable_list),
+          selectInput("first_country_select", "First Country: ", country_list),
+          selectInput("second_country_select", "Second Country: ", country_list, selected = "Austria")
+        ),
+        mainPanel(
+          h1("AQI vs GDP Comparison"),
+          plotlyOutput("compare")
+        )
+      )         
     )
+  )
 )
 
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
-    countries_scatterplot(input, output, countries)
-    synced_maps(input, output, countries)
+  synced_maps(input, output, countries)
+  countries_scatterplot(input, output, countries)
+  countries_lineplot(input, output, countries)
 }
 
 # Run the application 

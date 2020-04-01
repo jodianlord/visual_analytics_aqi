@@ -1,19 +1,19 @@
-countries_scatterplot <- function(input, output, data){
-  output$scatter <- renderPlot({
-    year_tosubset = input$date_range
+countries_lineplot <- function(input, output, data){
+  output$compare <- renderPlotly({
     pollutant_tosubset = input$pollutant
-    data <- subset(data, Year == year_tosubset)
     data <- subset(data, Variable == pollutant_tosubset)
     
-    ggplot(data, aes(x=Value, y=GDP_Per_Capita, text = paste("Country: ", Country))) +
-      geom_point(size=5, col="red") +
-      geom_vline(xintercept = 50) + geom_hline(yintercept = 35000) +
-      xlab("Pollutant Level") + ylab("GDP Per Capita") +
-      theme_light() +
-      geom_text_repel(aes(label=Country)) +
-      annotate("text", x = 25, y = 20000, alpha = 0.35, label = "Low GDP, Good Air Quality") +
-      annotate("text", x = 25, y = 60000, alpha = 0.35, label = "High GDP, Good Air Quality") +
-      annotate("text", x = 75, y = 20000, alpha = 0.35, label = "Low GDP, Bad Air Quality") +
-      annotate("text", x = 75, y = 60000, alpha = 0.35, label = "High GDP, Bad Air Quality")
+    first_country = input$first_country_select
+    second_country = input$second_country_select
+    data_first <- subset(data, Country == first_country)
+    data_second <- subset(data, Country == second_country)
+    
+    ggplot() +
+      geom_point(data_first, mapping = aes(x=GDP_Per_Capita, y=Value, text=paste("Year: ", Year)), color="black") +
+      geom_line(data = data_first, aes(x=GDP_Per_Capita, y=Value), color = "red") +
+      geom_point(data_second, mapping = aes(x=GDP_Per_Capita, y=Value, text=paste("Year: ", Year)), color="black") +
+      geom_line(data = data_second, aes(x=GDP_Per_Capita, y=Value), color = "blue") +
+      xlab("GDP Per Capita") + ylab("Pollutant Level") +
+      theme_light()
   })
 }

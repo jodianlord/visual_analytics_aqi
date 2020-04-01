@@ -1,5 +1,3 @@
-# takes in the data, filters it by input and displays a map shaded with the data.
-
 countries_scatterplot <- function(input, output, data){
   output$scatter <- renderPlot({
     year_tosubset = input$date_range
@@ -37,20 +35,6 @@ synced_maps <- function(input, output, data){
   })
 }
 
-line_country <- function(input, output, data){
-  output$linecountry <- renderPlotly({
-    country_tosubset = input$country_select
-    data <- subset(data, Country == country_tosubset)
-    pollutant_tosubset = input$pollutant
-    data <- subset(data, Variable == pollutant_tosubset)
-    scale <- mean(data$GDP_Per_Capita) / 10
-    ggplot(data) +
-      geom_line(aes(x=data$Year, y=data$GDP_Per_Capita, col="blue")) +
-      geom_line(aes(x=data$Year, y=data$Value*scale, col="red")) +
-      scale_y_continuous(sec.axis= sec_axis(~./scale, name="AQI"))
-  })
-}
-
 # displays a table filtered by input.
 show_table <- function(input, output, data){
   output$show_table <- DT::renderDT({
@@ -61,17 +45,3 @@ show_table <- function(input, output, data){
     return(data)
   })
 }
-
-pollutant_visualise <- function(input, output, data){
-  #Output a line plot of PM25 vs month
-  output$singaporeplot <- renderPlotly({
-    ggplot(data, aes(x=month)) +
-      ggtitle("Average PM25 and PM10 levels over Months") +
-      xlab("Date") + ylab("Pollutant Levels") + 
-      scale_x_date(date_breaks = "1 month", date_labels =  "%b %Y") +
-      theme(axis.text.x=element_text(angle=60, hjust=1)) +
-      geom_line(aes(y=totalpm25), color="red") +
-      geom_line(aes(y=totalpm10), color="blue")
-  })
-}
-
