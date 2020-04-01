@@ -1,58 +1,22 @@
 # takes in the data, filters it by input and displays a map shaded with the data.
-map_visualise <- function(input, output, data){
-  # CONSIDER USING TMAP
-  output$mapplot <- renderPlotly({
-    year_tosubset = input$date_range
-    pollutant_tosubset = input$pollutant
-    data <- subset(data, Year == year_tosubset)
-    data <- subset(data, Variable == pollutant_tosubset)
-    
-    ggplot(data, aes(x = long, y = lat, group = group )) +
-      geom_polygon(aes(fill = Value))
-  })
-}
 
 countries_scatterplot <- function(input, output, data){
-  output$scatter <- renderPlotly({
+  output$scatter <- renderPlot({
     year_tosubset = input$date_range
     pollutant_tosubset = input$pollutant
     data <- subset(data, Year == year_tosubset)
     data <- subset(data, Variable == pollutant_tosubset)
     
     ggplot(data, aes(x=Value, y=GDP_Per_Capita, text = paste("Country: ", Country))) +
-      geom_point(size=3, col="grey") +
-      #geom_text(aes(label=Country)) + 
+      geom_point(size=5, col="red") +
       geom_vline(xintercept = 50) + geom_hline(yintercept = 35000) +
       xlab("Pollutant Level") + ylab("GDP Per Capita") +
-      theme_minimal()
-  })
-}
-
-map_tmap <- function(input, output, data){
-  output$tmapplot <- renderLeaflet({
-    year_tosubset = input$date_range
-    pollutant_tosubset = input$pollutant
-    data <- subset(data, Year == year_tosubset)
-    data <- subset(data, Variable == pollutant_tosubset)
-    
-    map <- tm_shape(data) + 
-      tm_polygons("GDP_Per_Capita", title="GDP Per Capita") +
-      tm_style("gray") + tm_format("World")
-    tmap_leaflet(map)
-  })
-}
-
-map_tmap_pollution <- function(input, output, data){
-  output$pollutionplot <- renderLeaflet({
-    year_tosubset = input$date_range
-    pollutant_tosubset = input$pollutant
-    data <- subset(data, Year == year_tosubset)
-    data <- subset(data, Variable == pollutant_tosubset)
-    
-    map2 <- tm_shape(data) + 
-      tm_polygons("Value", title="Pollution") +
-      tm_style("gray") + tm_format("World")
-    tmap_leaflet(map2)
+      theme_light() +
+      geom_text_repel(aes(label=Country)) +
+      annotate("text", x = 25, y = 20000, alpha = 0.35, label = "Low GDP, Good Air Quality") +
+      annotate("text", x = 25, y = 60000, alpha = 0.35, label = "High GDP, Good Air Quality") +
+      annotate("text", x = 75, y = 20000, alpha = 0.35, label = "Low GDP, Bad Air Quality") +
+      annotate("text", x = 75, y = 60000, alpha = 0.35, label = "High GDP, Bad Air Quality")
   })
 }
 
@@ -64,10 +28,10 @@ synced_maps <- function(input, output, data){
     data <- subset(data, Variable == pollutant_tosubset)
     
     m1 <- tmap_leaflet(tm_shape(data) + 
-                         tm_polygons("Value", title="Pollution") +
+                         tm_polygons("Value", title="Pollution", palette="YlOrRd") +
                          tm_style("gray") + tm_format("World"))
     m2 <- tmap_leaflet(tm_shape(data) + 
-                         tm_polygons("GDP_Per_Capita", title="GDP Per Capita") +
+                         tm_polygons("GDP_Per_Capita", title="GDP Per Capita", palette="BuGn") +
                          tm_style("gray") + tm_format("World"))
     sync(m1, m2)
   })

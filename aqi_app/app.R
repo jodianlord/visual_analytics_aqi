@@ -16,7 +16,8 @@ packages = c(
   'maps',
   'leaflet.minicharts',
   'manipulateWidget',
-  'leafsync'
+  'leafsync',
+  'ggrepel'
 )
 for (p in packages) {
   if(!require(p, character.only = T)) {
@@ -28,6 +29,7 @@ for (p in packages) {
 # Local imports
 source("load_data_sf.R")
 source("maps.R")
+source("country.R")
 
 
 # Load datasets
@@ -51,13 +53,18 @@ map_panel <- tabPanel(
         
         # Output: Show a plot of the generated distribution
         mainPanel(
-          uiOutput("syncedmaps")
-          #DT::dataTableOutput("show_table"),
-          #combineWidgets(leafletOutput("tmapplot"), leafletOutput("pollutionplot"), ncol=2),
-          #leafletOutput("tmapplot"),
-          #leafletOutput("pollutionplot"),
-          #plotlyOutput("linecountry"),
-          #plotlyOutput("scatter")
+          tabsetPanel(type="tabs",
+                        tabPanel("World Overview",
+                          h1("AQI vs GDP Per Capita Worldwide"),
+                          fluidRow(uiOutput("syncedmaps")),
+                          h1("GDP Per Capita vs Pollutant Levels Per Country"),
+                          plotOutput("scatter")
+                        ),
+                        tabPanel("Country Specific",
+                           h1("AQI vs GDP Comparison")
+                           
+                           )
+                      )
         ),
         
         # sidebar position
@@ -77,15 +84,8 @@ ui <- navbarPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
-    map_visualise(input, output, countries)
-    map_tmap(input, output, countries)
-    map_tmap_pollution(input, output, countries)
-    show_table(input, output, countries)
-    line_country(input, output, countries)
     countries_scatterplot(input, output, countries)
     synced_maps(input, output, countries)
-    
-    
 }
 
 # Run the application 
