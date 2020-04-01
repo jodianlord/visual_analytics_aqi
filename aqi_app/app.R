@@ -72,7 +72,7 @@ ui <- fluidPage(
         ),
         mainPanel(
           h1("AQI vs GDP Comparison"),
-          plotlyOutput("compare"),
+          plotOutput("compare"),
           h1("AQI Comparison over Time"),
           plotOutput("slope")
         )

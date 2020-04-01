@@ -1,5 +1,5 @@
 countries_lineplot <- function(input, output, data){
-  output$compare <- renderPlotly({
+  output$compare <- renderPlot({
     pollutant_tosubset = input$pollutant_country
     data <- subset(data, Variable == pollutant_tosubset)
     
@@ -14,6 +14,18 @@ countries_lineplot <- function(input, output, data){
       geom_point(data_second, mapping = aes(x=GDP_Per_Capita, y=Value, text=paste("Year: ", Year)), color="black") +
       geom_line(data = data_second, aes(x=GDP_Per_Capita, y=Value), color = "blue") +
       labs(x="GDP Per Capita", y="Pollutant Level", color="Legend") +
+      geom_text_repel(data = rbind(data_first, data_second) %>% filter(Year == 2017), 
+                      aes(label = Country, x=GDP_Per_Capita, y=Value) , 
+                      hjust = "right", 
+                      fontface = "bold", 
+                      size = 5, 
+                      nudge_x = .5, 
+                      direction = "y") +
+      geom_label(data = rbind(data_first, data_second), 
+                 aes(label = Value, x=GDP_Per_Capita, y=Value), 
+                 size = 3, 
+                 label.padding = unit(0.05, "lines"), 
+                 label.size = 0.0) +
       theme_light() 
   })
 }
@@ -33,18 +45,18 @@ countries_slopegraph <- function(input, output, data){
                       aes(label = Country) , 
                       hjust = "left", 
                       fontface = "bold", 
-                      size = 3, 
+                      size = 5, 
                       nudge_x = -.45, 
                       direction = "y") +
       geom_text_repel(data = data %>% filter(Year == 2015), 
                       aes(label = Country) , 
                       hjust = "right", 
                       fontface = "bold", 
-                      size = 3, 
+                      size = 5, 
                       nudge_x = .5, 
                       direction = "y") +
       geom_label(aes(label = Value), 
-                 size = 2.5, 
+                 size = 3, 
                  label.padding = unit(0.05, "lines"), 
                  label.size = 0.0)
   })
