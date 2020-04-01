@@ -74,7 +74,12 @@ ui <- fluidPage(
           h1("AQI vs GDP Comparison"),
           plotOutput("compare"),
           h1("AQI Comparison over Time"),
-          plotOutput("slope")
+          plotOutput("slope"),
+          h1("AQI Factors over Time"),
+          fluidRow(
+            column(width = 10, plotlyOutput("factorplot")),
+            column(width = 10, plotlyOutput("factorplot2"))
+          )
         )
       )         
     )
@@ -87,6 +92,8 @@ server <- function(input, output, session) {
   countries_scatterplot(input, output, countries)
   countries_lineplot(input, output, countries)
   countries_slopegraph(input, output, countries)
+  countries_factors(input, output, countries)
+  countries_factors_second(input, output, countries)
 }
 
 # Run the application 

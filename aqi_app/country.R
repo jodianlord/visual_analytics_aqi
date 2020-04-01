@@ -61,3 +61,37 @@ countries_slopegraph <- function(input, output, data){
                  label.size = 0.0)
   })
 }
+
+countries_factors <- function(input, output, data){
+  output$factorplot <- renderPlotly(({
+    factors = c("Mean population exposure to PM2.5", "Percentage of population exposed to more than 10 micrograms/m3", 
+                "Percentage of population exposed to more than 15 micrograms/m3", "Percentage of population exposed to more than 25 micrograms/m3",
+                "Percentage of population exposed to more than 35 micrograms/m3", "Percentage of population covered")
+    first_country = input$first_country_select
+    second_country = input$second_country_select
+    data_first = subset(data, Country==first_country)
+    data_second = subset(data, Country == second_country)
+    
+    ggplot(data_first, aes(x=Year, y=Value, group=Variable)) +
+      geom_line(aes(color = Variable), size = 1) +
+      labs(title=first_country)
+  }))
+  
+}
+
+countries_factors_second <- function(input, output, data){
+  output$factorplot2 <- renderPlotly(({
+    factors = c("Mean population exposure to PM2.5", "Percentage of population exposed to more than 10 micrograms/m3", 
+                "Percentage of population exposed to more than 15 micrograms/m3", "Percentage of population exposed to more than 25 micrograms/m3",
+                "Percentage of population exposed to more than 35 micrograms/m3", "Percentage of population covered")
+    first_country = input$first_country_select
+    second_country = input$second_country_select
+    data_first = subset(data, Country==first_country)
+    data_second = subset(data, Country == second_country)
+    
+    ggplot(data_second, aes(x=Year, y=Value, group=Variable)) +
+      geom_line(aes(color = Variable), size = 1) +
+      labs(title=second_country)
+  }))
+  
+}
