@@ -40,46 +40,40 @@ year_list <- unique(countries$Year)
 variable_list <- unique(countries$Variable)
 country_list <- unique(countries$Country)
 
-# Map panel
-map_panel <- tabPanel(
-    'Map',
-    sidebarLayout(
-        # Inputs
-        sidebarPanel(
+# Create UI
+ui <- fluidPage(
+    # Application title
+    titlePanel("AQI Index"),
+    tabsetPanel(
+      tabPanel('World Overview',
+        sidebarLayout(
+          # Inputs
+          sidebarPanel(
+            selectInput("date_range", "Date:", year_list),
+            selectInput("pollutant", "Pollutant: ", variable_list)
+          ),
+          # Output: Show a plot of the generated distribution
+          mainPanel(
+            h1("AQI vs GDP Per Capita Worldwide"),
+            fluidRow(uiOutput("syncedmaps")),
+            h1("GDP Per Capita vs Pollutant Levels Per Country"),
+            plotOutput("scatter")
+          )
+        )
+      ),
+      tabPanel('Country Specific',
+        sidebarLayout(
+          sidebarPanel(
             selectInput("date_range", "Date:", year_list),
             selectInput("pollutant", "Pollutant: ", variable_list),
             selectInput("country_select", "Country: ", country_list)
-        ),
-        
-        # Output: Show a plot of the generated distribution
-        mainPanel(
-          tabsetPanel(type="tabs",
-                        tabPanel("World Overview",
-                          h1("AQI vs GDP Per Capita Worldwide"),
-                          fluidRow(uiOutput("syncedmaps")),
-                          h1("GDP Per Capita vs Pollutant Levels Per Country"),
-                          plotOutput("scatter")
-                        ),
-                        tabPanel("Country Specific",
-                           h1("AQI vs GDP Comparison")
-                           
-                           )
-                      )
-        ),
-        
-        # sidebar position
-        position = 'right'
+          ),
+          mainPanel(
+            h1("AQI vs GDP Comparison")
+          )
+        )         
+      )
     )
-)
-
-
-# Create UI
-ui <- navbarPage(
-    # Application title
-    titlePanel("AQI Index"),
-    
-    # Panels
-    map_panel
 )
 
 # Define server logic required to draw a histogram
