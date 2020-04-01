@@ -13,7 +13,10 @@ packages = c(
   'leaflet',
   'reshape2',
   'DT',
-  'maps'
+  'maps',
+  'leaflet.minicharts',
+  'manipulateWidget',
+  'leafsync'
 )
 for (p in packages) {
   if(!require(p, character.only = T)) {
@@ -48,10 +51,13 @@ map_panel <- tabPanel(
         
         # Output: Show a plot of the generated distribution
         mainPanel(
+          uiOutput("syncedmaps")
           #DT::dataTableOutput("show_table"),
-          leafletOutput("tmapplot"),
+          #combineWidgets(leafletOutput("tmapplot"), leafletOutput("pollutionplot"), ncol=2),
+          #leafletOutput("tmapplot"),
+          #leafletOutput("pollutionplot"),
           #plotlyOutput("linecountry"),
-          plotlyOutput("scatter")
+          #plotlyOutput("scatter")
         ),
         
         # sidebar position
@@ -73,9 +79,12 @@ ui <- navbarPage(
 server <- function(input, output, session) {
     map_visualise(input, output, countries)
     map_tmap(input, output, countries)
+    map_tmap_pollution(input, output, countries)
     show_table(input, output, countries)
     line_country(input, output, countries)
     countries_scatterplot(input, output, countries)
+    synced_maps(input, output, countries)
+    
     
 }
 

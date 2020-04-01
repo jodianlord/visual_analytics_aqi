@@ -37,10 +37,39 @@ map_tmap <- function(input, output, data){
     
     map <- tm_shape(data) + 
       tm_polygons("GDP_Per_Capita", title="GDP Per Capita") +
-      tm_shape(data) +
-      tm_bubbles(size="Value", id="pollutant", col="blue") +
-      tm_style_gray() + tm_format_World_wide()
+      tm_style("gray") + tm_format("World")
     tmap_leaflet(map)
+  })
+}
+
+map_tmap_pollution <- function(input, output, data){
+  output$pollutionplot <- renderLeaflet({
+    year_tosubset = input$date_range
+    pollutant_tosubset = input$pollutant
+    data <- subset(data, Year == year_tosubset)
+    data <- subset(data, Variable == pollutant_tosubset)
+    
+    map2 <- tm_shape(data) + 
+      tm_polygons("Value", title="Pollution") +
+      tm_style("gray") + tm_format("World")
+    tmap_leaflet(map2)
+  })
+}
+
+synced_maps <- function(input, output, data){
+  output$syncedmaps <- renderUI({
+    year_tosubset = input$date_range
+    pollutant_tosubset = input$pollutant
+    data <- subset(data, Year == year_tosubset)
+    data <- subset(data, Variable == pollutant_tosubset)
+    
+    m1 <- tmap_leaflet(tm_shape(data) + 
+                         tm_polygons("Value", title="Pollution") +
+                         tm_style("gray") + tm_format("World"))
+    m2 <- tmap_leaflet(tm_shape(data) + 
+                         tm_polygons("GDP_Per_Capita", title="GDP Per Capita") +
+                         tm_style("gray") + tm_format("World"))
+    sync(m1, m2)
   })
 }
 
