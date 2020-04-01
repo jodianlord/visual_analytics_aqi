@@ -21,10 +21,14 @@ packages = c(
   'CGPfunctions',
   'purrr'
 )
-for (p in packages) {
-  if(!require(p, character.only = T)) {
-    install.packages(p)
-  }
+
+#for (p in packages) {
+#  if(!require(p, character.only = T)) {
+#    install.packages(p)
+#  }
+#  library(p, character.only = T)
+#}
+for (p in packages){
   library(p, character.only = T)
 }
 
