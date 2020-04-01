@@ -17,7 +17,9 @@ packages = c(
   'leaflet.minicharts',
   'manipulateWidget',
   'leafsync',
-  'ggrepel'
+  'ggrepel',
+  'CGPfunctions',
+  'purrr'
 )
 for (p in packages) {
   if(!require(p, character.only = T)) {
@@ -61,17 +63,18 @@ ui <- fluidPage(
         )
       )
     ),
-    tabPanel('Country Specific',
+    tabPanel('Country Comparison',
       sidebarLayout(
         sidebarPanel(
-          selectInput("date_range", "Date:", year_list),
-          selectInput("pollutant", "Pollutant: ", variable_list),
+          selectInput("pollutant_country", "Pollutant: ", variable_list),
           selectInput("first_country_select", "First Country: ", country_list),
           selectInput("second_country_select", "Second Country: ", country_list, selected = "Austria")
         ),
         mainPanel(
           h1("AQI vs GDP Comparison"),
-          plotlyOutput("compare")
+          plotlyOutput("compare"),
+          h1("AQI Comparison over Time"),
+          plotOutput("slope")
         )
       )         
     )
@@ -83,6 +86,7 @@ server <- function(input, output, session) {
   synced_maps(input, output, countries)
   countries_scatterplot(input, output, countries)
   countries_lineplot(input, output, countries)
+  countries_slopegraph(input, output, countries)
 }
 
 # Run the application 
