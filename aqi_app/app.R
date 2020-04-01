@@ -3,7 +3,6 @@ packages = c(
   'shiny', 
   'ggplot2', 
   'dplyr',
-  'lubridate',
   'scales',
   'plotly',
   'knitr',
@@ -22,15 +21,13 @@ packages = c(
   'purrr'
 )
 
-#for (p in packages) {
-#  if(!require(p, character.only = T)) {
-#    install.packages(p)
-#  }
-#  library(p, character.only = T)
-#}
-for (p in packages){
+for (p in packages) {
+  if(!require(p, character.only = T)) {
+    install.packages(p)
+  }
   library(p, character.only = T)
 }
+
 
 # Local imports
 source("load_data_sf.R")
