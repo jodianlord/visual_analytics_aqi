@@ -41,6 +41,7 @@ countries_slopegraph <- function(input, output, data){
     
     tidy_data <- data[,c('Country', 'Value')]
     averages <- aggregate(tidy_data[,2], list(tidy_data$Country), mean)
+    averages <- unique(averages)
     sorted_countries <- averages[order(averages$Value, decreasing=TRUE), ]
     sorted_countries_ascending <- averages[order(averages$Value, decreasing=FALSE), ]
     st_geometry(sorted_countries) <- NULL
