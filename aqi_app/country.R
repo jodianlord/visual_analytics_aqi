@@ -89,14 +89,14 @@ countries_factors <- function(input, output, data){
     factors = c("Mean population exposure to PM2.5", "Percentage of population exposed to more than 10 micrograms/m3", 
                 "Percentage of population exposed to more than 15 micrograms/m3", "Percentage of population exposed to more than 25 micrograms/m3",
                 "Percentage of population exposed to more than 35 micrograms/m3", "Percentage of population covered")
+    factors_chosen = c("Mean population exposure to PM2.5", "Percentage of population exposed to more than 15 micrograms/m3")
     first_country = input$first_country_select
     second_country = input$second_country_select
-    data_first = subset(data, Country==first_country)
-    data_second = subset(data, Country == second_country)
-    
-    ggplot(data_first, aes(x=Year, y=Value, group=Variable)) +
-      geom_line(aes(color = Variable), size = 1) +
-      labs(title=first_country)
+    country_set = c(first_country, second_country)
+    data_first <- subset(data, Country %in% country_set & Variable == "Mean population exposure to PM2.5")
+    ggplot(data_first, aes(x=Year, y=Value, group=Country)) +
+      geom_line(aes(color = Country), size = 1) +
+      labs(title="Mean population exposure to PM2.5")
   }))
   
 }
@@ -106,14 +106,14 @@ countries_factors_second <- function(input, output, data){
     factors = c("Mean population exposure to PM2.5", "Percentage of population exposed to more than 10 micrograms/m3", 
                 "Percentage of population exposed to more than 15 micrograms/m3", "Percentage of population exposed to more than 25 micrograms/m3",
                 "Percentage of population exposed to more than 35 micrograms/m3", "Percentage of population covered")
+    factors_chosen = c("Mean population exposure to PM2.5", "Percentage of population exposed to more than 15 micrograms/m3")
     first_country = input$first_country_select
     second_country = input$second_country_select
-    data_first = subset(data, Country==first_country)
-    data_second = subset(data, Country == second_country)
-    
-    ggplot(data_second, aes(x=Year, y=Value, group=Variable)) +
-      geom_line(aes(color = Variable), size = 1) +
-      labs(title=second_country)
+    country_set = c(first_country, second_country)
+    data_first <- subset(data, Country %in% country_set & Variable == "Percentage of population exposed to more than 15 micrograms/m3")
+    ggplot(data_first, aes(x=Year, y=Value, group=Country)) +
+      geom_line(aes(color = Country), size = 1) +
+      labs(title="Percentage of population exposed to more than 15 micrograms/m3")
   }))
   
 }

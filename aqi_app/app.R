@@ -68,10 +68,10 @@ ui <- fluidPage(
       sidebarLayout(
         sidebarPanel(
           selectInput("pollutant_country", "Pollutant: ", variable_list),
-          selectInput("first_country_select", "First Country: ", country_list),
-          selectInput("second_country_select", "Second Country: ", country_list, selected = "Austria"),
           selectInput("slope_select", "Top/Bottom N Countries: ", c("Top 10 Polluters", "Top 20 Polluters",
-                                                                    "Bottom 10 Polluters", "Bottom 20 Polluters"))
+                                                                    "Bottom 10 Polluters", "Bottom 20 Polluters")),
+          selectInput("first_country_select", "First Country: ", country_list),
+          selectInput("second_country_select", "Second Country: ", country_list, selected = "Austria")
         ),
         mainPanel(
           tabsetPanel(
