@@ -5,19 +5,19 @@ countries_scatterplot <- function(input, output, data){
     data <- subset(data, Year == year_tosubset)
     data <- subset(data, Variable == pollutant_tosubset)
     
-    data <- data %>% mutate(Pollutant.percentile = percent_rank(Value))
-    data <- data %>% mutate(GDP_Per_Capita.percentile = percent_rank(GDP_Per_Capita))
+    data <- data %>% mutate(Pollutant.percentile = percent_rank(Value) * 100)
+    data <- data %>% mutate(GDP_Per_Capita.percentile = percent_rank(GDP_Per_Capita) * 100)
     
     ggplot(data, aes(x=Pollutant.percentile, y=GDP_Per_Capita.percentile, text = paste("Country: ", Country))) +
       geom_point(size=2, col="blue") +
-      geom_vline(xintercept = 0.5) + geom_hline(yintercept = 0.5) +
+      geom_vline(xintercept = 50) + geom_hline(yintercept = 50) +
       xlab("Pollutant Level Percentile") + ylab("GDP Per Capita Percentile") +
       theme_light() +
       #geom_text_repel(aes(label=Country)) +
-      annotate("text", x = 0.25, y = 0.25, alpha = 0.35, label = "Low GDP, Good Air Quality") +
-      annotate("text", x = 0.25, y = 0.75, alpha = 0.35, label = "High GDP, Good Air Quality") +
-      annotate("text", x = 0.75, y = 0.25, alpha = 0.35, label = "Low GDP, Bad Air Quality") +
-      annotate("text", x = 0.75, y = 0.75, alpha = 0.35, label = "High GDP, Bad Air Quality")
+      annotate("text", x = 25, y = 25, alpha = 0.35, label = "Low GDP, Good Air Quality") +
+      annotate("text", x = 25, y = 75, alpha = 0.35, label = "High GDP, Good Air Quality") +
+      annotate("text", x = 75, y = 25, alpha = 0.35, label = "Low GDP, Bad Air Quality") +
+      annotate("text", x = 75, y = 75, alpha = 0.35, label = "High GDP, Bad Air Quality")
   })
 }
 

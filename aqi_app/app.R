@@ -69,17 +69,25 @@ ui <- fluidPage(
         sidebarPanel(
           selectInput("pollutant_country", "Pollutant: ", variable_list),
           selectInput("first_country_select", "First Country: ", country_list),
-          selectInput("second_country_select", "Second Country: ", country_list, selected = "Austria")
+          selectInput("second_country_select", "Second Country: ", country_list, selected = "Austria"),
+          selectInput("slope_select", "Top/Bottom N Countries: ", c("Top 10 Polluters", "Top 20 Polluters",
+                                                                    "Bottom 10 Polluters", "Bottom 20 Polluters"))
         ),
         mainPanel(
-          h1("AQI vs GDP Comparison"),
-          plotOutput("compare"),
-          h1("AQI Comparison over Time"),
-          plotOutput("slope"),
-          h1("AQI Factors over Time"),
-          fluidRow(
-            column(width = 10, plotlyOutput("factorplot")),
-            column(width = 10, plotlyOutput("factorplot2"))
+          tabsetPanel(
+            tabPanel("AQI/GDP Comparison",
+                     h1("AQI vs GDP Comparison"),
+                     plotOutput("compare", width = '80em', height = '60em'),
+                     h1("AQI Comparison over Time"),
+                     plotOutput("slope", width = '80em', height = '60em')
+            ),
+            tabPanel("Factor Comparison",
+                     h1("AQI Factors over Time"),
+                     fluidRow(
+                       column(width = 10, plotlyOutput("factorplot")),
+                       column(width = 10, plotlyOutput("factorplot2"))
+                     )
+            )
           )
         )
       )         
