@@ -60,7 +60,7 @@ ui <- fluidPage(
           h1("AQI vs GDP Per Capita Worldwide"),
           fluidRow(uiOutput("syncedmaps")),
           h1("GDP Per Capita vs Pollutant Levels Per Country"),
-          plotlyOutput("scatter")
+          plotlyOutput("scatter", width = '80em', height = '60em')
         )
       )
     ),
