@@ -77,11 +77,12 @@ countries_slopegraph <- function(input, output, data){
                       size = 5, 
                       nudge_x = .5, 
                       direction = "y") +
-      theme(legend.position = "none") 
-#      geom_label(aes(label = Value), 
-#                 size = 4, 
-#                 label.padding = unit(0.05, "lines"), 
-#                 label.size = 0.0)
+      #theme_hc()+ scale_colour_hc() +
+      theme(legend.position = "none")
+    #      geom_label(aes(label = Value), 
+    #                 size = 4, 
+    #                 label.padding = unit(0.05, "lines"), 
+    #                 label.size = 0.0)
   })
 }
 

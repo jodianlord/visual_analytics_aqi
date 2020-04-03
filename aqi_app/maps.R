@@ -1,3 +1,22 @@
+synced_maps <- function(input, output, data){
+  output$syncedmaps <- renderUI({
+    year_tosubset = input$date_range
+    pollutant_tosubset = input$pollutant
+    data <- subset(data, Year == year_tosubset)
+    data <- subset(data, Variable == pollutant_tosubset)
+    
+    m1 <- tmap_leaflet(tm_shape(data) + 
+                         tm_polygons("Value", title="Pollution", palette="YlOrRd") +
+                         tm_style("gray") + tm_format("World") +
+                         tm_view(set.zoom.limits = c(1, 3)))
+    m2 <- tmap_leaflet(tm_shape(data) + 
+                         tm_polygons("GDP_Per_Capita", title="GDP Per Capita", palette="BuGn") +
+                         tm_style("gray") + tm_format("World") +
+                         tm_view(set.zoom.limits = c(1, 3))) 
+    sync(m1, m2) 
+  })
+}
+
 countries_scatterplot <- function(input, output, data){
   output$scatter <- renderPlotly({
     year_tosubset = input$date_range
@@ -21,24 +40,7 @@ countries_scatterplot <- function(input, output, data){
   })
 }
 
-synced_maps <- function(input, output, data){
-  output$syncedmaps <- renderUI({
-    year_tosubset = input$date_range
-    pollutant_tosubset = input$pollutant
-    data <- subset(data, Year == year_tosubset)
-    data <- subset(data, Variable == pollutant_tosubset)
-    
-    m1 <- tmap_leaflet(tm_shape(data) + 
-                         tm_polygons("Value", title="Pollution", palette="YlOrRd") +
-                         tm_style("gray") + tm_format("World") +
-                         tm_view(set.zoom.limits = c(1, 3)))
-    m2 <- tmap_leaflet(tm_shape(data) + 
-                         tm_polygons("GDP_Per_Capita", title="GDP Per Capita", palette="BuGn") +
-                         tm_style("gray") + tm_format("World") +
-                         tm_view(set.zoom.limits = c(1, 3))) 
-    sync(m1, m2) 
-  })
-}
+
 
 # displays a table filtered by input.
 show_table <- function(input, output, data){

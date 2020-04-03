@@ -19,7 +19,8 @@ packages = c(
   'ggrepel',
   'CGPfunctions',
   'purrr',
-  'shinydashboard'
+  'shinydashboard',
+  'ggthemes'
 )
 
 for (p in packages) {
@@ -49,39 +50,36 @@ ui <- dashboardPage(
   # Application title
   dashboardHeader(title="AQI Index"),
   dashboardSidebar(
-    sidebarMenu(
-      menuItem("World Overview", tabName = "world", icon = icon("fas fa-globe-americas")),
-      menuItem("AQI vs GDP Comparison", tabName = "aqigdpcomp", icon = icon("th")),
-      menuItem("Pollution Factors Comparison", tabName = "factorcomp", icon = icon("th"))
+    sidebarMenu(id="mytabs",
+                menuItem("World Overview", tabName = "world", icon = icon("fas fa-globe-americas")),
+                menuItem("AQI vs GDP Comparison", tabName = "aqigdpcomp", icon = icon("th")),
+                menuItem("Pollution Factors Comparison", tabName = "factorcomp", icon = icon("th"))
     )
   ),
   dashboardBody(
     tabItems(
       tabItem(tabName='world',
               h1("Input"),
-              fluidRow(
-                box(
-                  title = "Filters",
-                  selectInput("date_range", "Date:", year_list),
-                  selectInput("pollutant", "Pollutant: ", variable_list)
-                )
-              ),
+              fluidRow(box(
+                title="Controls",
+                selectInput("date_range", "Date: ", year_list),
+                selectInput("pollutant", "Pollutant: ", variable_list)
+              )),
               h1("AQI vs GDP Per Capita Worldwide"),
               fluidRow(uiOutput("syncedmaps")),
               h1("GDP Per Capita vs Pollutant Levels Per Country"),
               fluidRow(plotlyOutput("scatter", width = '80em', height = '60em'))
       ),
       tabItem(tabName="aqigdpcomp",
+              h1("Input"),
+              fluidRow(box(
+                title="Controls",
+                selectInput("pollutant_country", "Pollutant: ", variable_list),
+                selectInput("slope_select", "Top/Bottom N Countries: ", c("Top 10 Polluters", "Top 20 Polluters",
+                                                                          "Bottom 10 Polluters", "Bottom 20 Polluters")),
+                selectInput("first_country_select", "First Country: ", country_list),
+                selectInput("second_country_select", "Second Country: ", country_list, selected = "Austria"))),
               h1("AQI vs GDP Comparison"),
-              fluidRow(
-                box(title = "Controls",
-                    selectInput("pollutant_country", "Pollutant: ", variable_list),
-                    selectInput("slope_select", "Top/Bottom N Countries: ", c("Top 10 Polluters", "Top 20 Polluters",
-                                                                              "Bottom 10 Polluters", "Bottom 20 Polluters")),
-                    selectInput("first_country_select", "First Country: ", country_list),
-                    selectInput("second_country_select", "Second Country: ", country_list, selected = "Austria")
-                )
-              ),
               fluidRow(plotOutput("compare", width = '80em', height = '60em')),
               h1("AQI Comparison over Time"),
               fluidRow(plotOutput("slope", width = '80em', height = '60em'))
