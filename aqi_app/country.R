@@ -91,8 +91,8 @@ countries_factors <- function(input, output, data){
                 "Percentage of population exposed to more than 15 micrograms/m3", "Percentage of population exposed to more than 25 micrograms/m3",
                 "Percentage of population exposed to more than 35 micrograms/m3", "Percentage of population covered")
     factors_chosen = c("Mean population exposure to PM2.5", "Percentage of population exposed to more than 15 micrograms/m3")
-    first_country = input$first_country_select
-    second_country = input$second_country_select
+    first_country = input$first_country_select_1
+    second_country = input$second_country_select_1
     country_set = c(first_country, second_country)
     data_first <- subset(data, Country %in% country_set & Variable == "Mean population exposure to PM2.5")
     ggplot(data_first, aes(x=Year, y=Value, group=Country)) +
@@ -108,8 +108,8 @@ countries_factors_second <- function(input, output, data){
                 "Percentage of population exposed to more than 15 micrograms/m3", "Percentage of population exposed to more than 25 micrograms/m3",
                 "Percentage of population exposed to more than 35 micrograms/m3", "Percentage of population covered")
     factors_chosen = c("Mean population exposure to PM2.5", "Percentage of population exposed to more than 15 micrograms/m3")
-    first_country = input$first_country_select
-    second_country = input$second_country_select
+    first_country = input$first_country_select_1
+    second_country = input$second_country_select_1
     country_set = c(first_country, second_country)
     data_first <- subset(data, Country %in% country_set & Variable == "Percentage of population exposed to more than 15 micrograms/m3")
     ggplot(data_first, aes(x=Year, y=Value, group=Country)) +
