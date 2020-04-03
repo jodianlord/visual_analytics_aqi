@@ -101,8 +101,8 @@ ui <- dashboardPage(
   dashboardSidebar(
     sidebarMenu(id="mytabs",
                 menuItem("World Overview", tabName = "world", icon = icon("fas fa-globe-americas")),
-                menuItem("AQI vs GDP Comparison", tabName = "aqigdpcomp", icon = icon("th")),
-                menuItem("Pollution Factors Comparison", tabName = "factorcomp", icon = icon("th")),
+                menuItem("AQI vs GDP Comparison", tabName = "aqigdpcomp", icon = icon("fas fa-cloud")),
+                menuItem("Pollution Factors Comparison", tabName = "factorcomp", icon = icon("fas fa-industry")),
                 conditionalPanel(condition="input.mytabs == 'world'",
                                  selectInput("date_range", "Date: ", year_list),
                                  selectInput("pollutant", "Pollutant: ", variable_list)),
