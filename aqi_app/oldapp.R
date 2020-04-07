@@ -44,6 +44,7 @@ pollution = load_pollution(countries)
 year_list <- unique(countries$Year)
 variable_list <- unique(countries$Variable)
 country_list <- unique(countries$Country)
+country_list <- sort(country_list)
 
 # Create UI
 ui <- dashboardPage(
@@ -52,7 +53,7 @@ ui <- dashboardPage(
   dashboardSidebar(
     sidebarMenu(id="mytabs",
                 menuItem("World Overview", tabName = "world", icon = icon("fas fa-globe-americas")),
-                menuItem("AQI vs GDP Comparison", tabName = "aqigdpcomp", icon = icon("fas fa-wind")),
+                menuItem("AQI vs GDP Comparison", tabName = "aqigdpcomp", icon = icon("fas fa-cloud")),
                 menuItem("Pollution Factors Comparison", tabName = "factorcomp", icon = icon("fas fa-industry")),
                 conditionalPanel(condition="input.mytabs == 'world'",
                                  selectInput("date_range", "Date: ", year_list),
@@ -76,13 +77,13 @@ ui <- dashboardPage(
               h1("AQI vs GDP Per Capita Worldwide"),
               fluidRow(uiOutput("syncedmaps")),
               h1("GDP Per Capita vs Pollutant Levels Per Country"),
-              fluidRow(plotlyOutput("scatter", width = '80em', height = '60em'))
+              fluidRow(plotlyOutput("scatter", width = '40em', height = '30em'))
       ),
       tabItem(tabName="aqigdpcomp",
               h1("AQI vs GDP Comparison"),
-              fluidRow(plotOutput("compare", width = '80em', height = '60em')),
+              fluidRow(plotOutput("compare", width = '40em', height = '30em')),
               h1("AQI Comparison over Time"),
-              fluidRow(plotOutput("slope", width = '80em', height = '60em'))
+              fluidRow(plotOutput("slope", width = '40em', height = '30em'))
       ),
       tabItem(tabName="factorcomp",
               h1("AQI Factors over Time"),

@@ -81,11 +81,6 @@ load_maps <- function(){
   return(map_world)
 }
 
-load_policies <- function() {
-  policies <- readxl::read_xlsx('data/policies.xlsx')
-  return(policies)
-}
-
 # Load datasets
 countries = load_dataset()
 pollution = load_pollution(countries)
@@ -93,6 +88,7 @@ pollution = load_pollution(countries)
 year_list <- unique(countries$Year)
 variable_list <- unique(countries$Variable)
 country_list <- unique(countries$Country)
+country_list <- sort(country_list)
 
 # Create UI
 ui <- dashboardPage(
@@ -125,13 +121,13 @@ ui <- dashboardPage(
               h1("AQI vs GDP Per Capita Worldwide"),
               fluidRow(uiOutput("syncedmaps")),
               h1("GDP Per Capita vs Pollutant Levels Per Country"),
-              fluidRow(plotlyOutput("scatter", width = '80em', height = '60em'))
+              fluidRow(plotlyOutput("scatter", width = '40em', height = '30em'))
       ),
       tabItem(tabName="aqigdpcomp",
               h1("AQI vs GDP Comparison"),
-              fluidRow(plotOutput("compare", width = '80em', height = '60em')),
+              fluidRow(plotOutput("compare", width = '40em', height = '30em')),
               h1("AQI Comparison over Time"),
-              fluidRow(plotOutput("slope", width = '80em', height = '60em'))
+              fluidRow(plotOutput("slope", width = '40em', height = '30em'))
       ),
       tabItem(tabName="factorcomp",
               h1("AQI Factors over Time"),

@@ -30,7 +30,6 @@ countries_lineplot <- function(input, output, data){
   })
 }
 
-
 countries_slopegraph <- function(input, output, data){
   output$slope <- renderPlot({
     first_country = input$first_country_select
@@ -38,6 +37,13 @@ countries_slopegraph <- function(input, output, data){
     pollutant_tosubset = input$pollutant_country
     data <- subset(data, Variable == pollutant_tosubset)
     data <- subset(data, Year %in% c(1995, 2000, 2005, 2010, 2015))
+    
+    na_countries <- subset(data, is.na(data$Value))
+    na_countries <- unique(na_countries$Country)
+    
+    data <- subset(data, !(Country %in% na_countries))
+    data <- subset(data, Value != 0)
+    
     
     tidy_data <- data[,c('Country', 'Value')]
     averages <- aggregate(tidy_data[,2], list(tidy_data$Country), mean)
