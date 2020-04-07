@@ -1,35 +1,26 @@
 # Library imports
-packages = c(
-  'shiny', 
-  'ggplot2', 
-  'dplyr',
-  'scales',
-  'plotly',
-  'knitr',
-  'tmap',
-  'WDI',
-  'sf',
-  'leaflet',
-  'reshape2',
-  'DT',
-  'maps',
-  'leaflet.minicharts',
-  'manipulateWidget',
-  'leafsync',
-  'ggrepel',
-  'purrr',
-  'shinydashboard',
-  'ggthemes'
-)
+library('shiny') 
+library('ggplot2') 
+library('dplyr')
+library('scales')
+library('plotly')
+library('knitr')
+library('tmap')
+library('WDI')
+library('sf')
+library('leaflet')
+library('reshape2')
+library('DT')
+library('maps')
+library('leaflet.minicharts')
+library('manipulateWidget')
+library('leafsync')
+library('ggrepel')
+library('purrr')
+library('shinydashboard')
+library('ggthemes')
 
-for (p in packages) {
-  #if(!require(p, character.only = T)) {
-  #  install.packages(p)
-  #}
-  #library(p, character.only = T)
-  library(p, character.only = T)
-}
-
+data("World")
 load_dataset <- function(){
   countries = read.csv('data/EXP_PM2_5_14032020074440630.csv', stringsAsFactors = FALSE)
   countries <- subset(countries, Macroregion == '-Total-')
