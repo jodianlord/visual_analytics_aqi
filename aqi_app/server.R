@@ -1,27 +1,35 @@
 # Library imports
-library('shiny') 
-library('ggplot2') 
-library('dplyr')
-library('scales')
-library('plotly')
-library('knitr')
-library('tmap')
-library('WDI')
-library('sf')
-library('leaflet')
-library('reshape2')
-library('DT')
-library('maps')
-library('leaflet.minicharts')
-library('manipulateWidget')
-library('leafsync')
-library('ggrepel')
-library('purrr')
-library('shinydashboard')
-library('ggthemes')
+packages = c(
+  'shiny', 
+  'ggplot2', 
+  'dplyr',
+  'scales',
+  'plotly',
+  'knitr',
+  'tmap',
+  'WDI',
+  'sf',
+  'leaflet',
+  'reshape2',
+  'DT',
+  'maps',
+  'leaflet.minicharts',
+  'manipulateWidget',
+  'leafsync',
+  'ggrepel',
+  'purrr',
+  'shinydashboard',
+  'ggthemes'
+)
 
-map_world = map_data('world')
-data("World")
+for (p in packages) {
+  #if(!require(p, character.only = T)) {
+  #  install.packages(p)
+  #}
+  #library(p, character.only = T)
+  library(p, character.only = T)
+}
+
 load_dataset <- function(){
   countries = read.csv('data/EXP_PM2_5_14032020074440630.csv', stringsAsFactors = FALSE)
   countries <- subset(countries, Macroregion == '-Total-')
@@ -70,29 +78,9 @@ load_dataset <- function(){
   return(countries)
 }
 
-load_pollution <- function(countries) {
-  df <- subset(countries, countries$Variable == "Mean population exposure to PM2.5")
-  df <- df[c('Country', 'Year', 'Value')]
-  df <- aggregate(cbind(value=df$Value), list(country = df$Country, year = df$Year), mean)
-  return(df)
-}
-
-load_maps <- function(){
-  return(map_world)
-}
-
-load_policies <- function() {
-  policies <- readxl::read_xlsx('data/policies.xlsx')
-  return(policies)
-}
 
 # Load datasets
 countries = load_dataset()
-pollution = load_pollution(countries)
-
-year_list <- unique(countries$Year)
-variable_list <- unique(countries$Variable)
-country_list <- unique(countries$Country)
 
 synced_maps <- function(input, output, data){
   output$syncedmaps <- renderUI({
