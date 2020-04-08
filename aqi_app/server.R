@@ -150,7 +150,7 @@ countries_lineplot <- function(input, output, data){
                       nudge_x = .5, 
                       direction = "y") +
       geom_label(data = rbind(data_first, data_second), 
-                 aes(label = Value, x=GDP_Per_Capita, y=Value), 
+                 aes(label = Year, x=GDP_Per_Capita, y=Value), 
                  size = 4, 
                  label.padding = unit(0.05, "lines"), 
                  label.size = 0.0) +
