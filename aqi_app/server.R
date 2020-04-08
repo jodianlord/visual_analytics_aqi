@@ -183,14 +183,17 @@ countries_slopegraph <- function(input, output, data){
     st_geometry(sorted_countries_ascending) <- NULL
     
     topn <- input$slope_select
-    
-    if(topn == "Top 10 Polluters"){
+    if(topn == "Top 5 Polluters"){
+      top_n <- sorted_countries[1:5,1] 
+    }else if(topn == "Top 10 Polluters"){
       top_n <- sorted_countries[1:10,1]
     }else if(topn == "Top 20 Polluters"){
       top_n <- sorted_countries[1:20,1]
+    }else if(topn == "Bottom 5 Polluters"){
+      top_n <- sorted_countries_ascending[1:5,1] 
     }else if(topn == "Bottom 10 Polluters"){
       top_n <- sorted_countries_ascending[1:10,1]
-    }else{
+    }else if(topn == "Bottom 20 Polluters"){
       top_n <- sorted_countries_ascending[1:20,1]
     }
     
