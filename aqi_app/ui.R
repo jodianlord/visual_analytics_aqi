@@ -118,8 +118,8 @@ ui <- dashboardPage(skin="purple",
       tabItem(tabName="factorcomp",
               h1("AQI Factors over Time"),
               fluidRow(
-                column(width = 10, plotlyOutput("factorplot")),
-                column(width = 10, plotlyOutput("factorplot2"))
+                column(width = 5, height = 4, plotlyOutput("factorplot")),
+                column(width = 5, height = 4, plotlyOutput("factorplot2"))
               )
       )
     )
