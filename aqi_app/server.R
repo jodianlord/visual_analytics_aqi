@@ -107,6 +107,7 @@ countries_scatterplot <- function(input, output, data){
       geom_vline(xintercept = 50) + geom_hline(yintercept = 50) +
       xlab("Pollutant Level Percentile") + ylab("GDP Per Capita Percentile") +
       theme_light() +
+      expand_limits(x = 100, y = 100) +
       #geom_text_repel(aes(label=Country)) +
       annotate("text", x = 25, y = 25, alpha = 0.35, label = "Low GDP, Good Air Quality") +
       annotate("text", x = 25, y = 75, alpha = 0.35, label = "High GDP, Good Air Quality") +
