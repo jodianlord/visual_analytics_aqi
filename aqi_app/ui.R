@@ -79,7 +79,7 @@ country_list <- sort(unique(countries$Country))
 # Create UI
 ui <- dashboardPage(skin="purple",
   # Application title
-  dashboardHeader(title="AQI Index"),
+  dashboardHeader(title = span(tagList(icon("fas fa-fire"), "Purple Haze"))),
   dashboardSidebar(
     sidebarMenu(id="mytabs",
                 menuItem("World Overview", tabName = "world", icon = icon("fas fa-globe-americas")),
