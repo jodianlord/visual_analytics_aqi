@@ -79,6 +79,7 @@ country_list <- sort(unique(countries$Country))
 # Create UI
 ui <- dashboardPage(skin="purple",
                     # Application title
+                    title = "Purple Haze Dashboard",
                     dashboardHeader(title = span(tagList(icon("fas fa-fire"), "Purple Haze"))),
                     dashboardSidebar(
                       sidebarMenu(id="mytabs",
