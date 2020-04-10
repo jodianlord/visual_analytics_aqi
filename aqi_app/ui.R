@@ -85,17 +85,22 @@ ui <- dashboardPage(skin="purple",
                       sidebarMenu(id="mytabs",
                                   menuItem("World Overview", tabName = "world", icon = icon("fas fa-globe-americas")),
                                   menuItem("AQI vs GDP Comparison", tabName = "aqigdpcomp", icon = icon("fas fa-cloud")),
+                                  menuItem("AQI over Time", tabName = "aqitimecomp", icon=icon("fas fa-chart-area")),
                                   menuItem("Pollution Factors Comparison", tabName = "factorcomp", icon = icon("fas fa-industry")),
                                   conditionalPanel(condition="input.mytabs == 'world'",
                                                    selectInput("date_range", "Date: ", year_list),
                                                    selectInput("pollutant", "Pollutant: ", variable_list)),
                                   conditionalPanel(condition="input.mytabs == 'aqigdpcomp'",
                                                    selectInput("pollutant_country", "Pollutant: ", variable_list),
-                                                   selectInput("slope_select", "Top/Bottom N Countries: ", c("Top 5 Polluters", "Top 10 Polluters", "Top 20 Polluters",
-                                                                                                             "Bottom 5 Polluters", "Bottom 10 Polluters", "Bottom 20 Polluters")),
                                                    selectInput("first_country_select", "First Country: ", country_list, selected = "Australia"),
                                                    selectInput("second_country_select", "Second Country: ", country_list, selected = "Austria")
                                   ),
+                                  conditionalPanel(condition="input.mytabs == 'aqitimecomp'",
+                                                   selectInput("pollutant_country", "Pollutant: ", variable_list),
+                                                   selectInput("slope_select", "Top/Bottom N Countries: ", 
+                                                               c("Top 5 Polluters", "Top 10 Polluters", "Top 20 Polluters", 
+                                                                 "Bottom 5 Polluters", "Bottom 10 Polluters", "Bottom 20 Polluters"))
+                                                   ),
                                   conditionalPanel(condition="input.mytabs == 'factorcomp'", 
                                                    selectInput("first_country_select_1", "First Country: ", country_list, selected = "Australia"),
                                                    selectInput("second_country_select_1", "Second Country: ", country_list, selected = "Austria")
@@ -122,17 +127,22 @@ ui <- dashboardPage(skin="purple",
                                 fluidRow(
                                   column(width = 5, height = 6, offset = 1, 
                                          h1("AQI vs GDP Comparison"),
-                                         plotOutput("compare")),
-                                  column(width = 5,
+                                         plotOutput("compare"))
+                                )
+                        ),
+                        tabItem(tabName="aqitimecomp",
+                                fluidRow(
+                                  column(width=5, height = 6, offset = 1,
                                          h1("AQI Comparison over Time"),
-                                         plotOutput("slope", height = "60em"))
+                                         plotOutput("slope", height = "60em")
+                                  )
                                 )
                         ),
                         tabItem(tabName="factorcomp",
                                 fluidRow(
                                   column(width = 5, height = 1, offset = 1,
                                          h1("AQI Factors over Time")
-                                         )
+                                  )
                                 ),
                                 fluidRow(
                                   column(offset = 1, width = 5, height = 4, plotlyOutput("factorplot")),
