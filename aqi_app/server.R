@@ -149,26 +149,28 @@ countries_lineplot <- function(input, output, data){
       geom_line(data = data_second, aes(x=GDP_Per_Capita, y=Value), color = "blue") +
       labs(x="GDP Per Capita", y="Pollutant Level", color="Legend") +
       geom_text_repel(data = rbind(data_first, data_second) %>% filter(Year == 2017), 
-                      aes(label = Country, x=GDP_Per_Capita, y=Value) , 
-                      hjust = "right", 
+                      aes(label = Country, x=GDP_Per_Capita, y=Value), 
+                      hjust = 1,
+                      vjust = 1,
                       fontface = "bold", 
                       size = 5, 
                       nudge_x = .5, 
                       direction = "y") +
-      geom_label(data = rbind(data_first, data_second), 
-                 aes(label = Year, x=GDP_Per_Capita, y=Value), 
-                 size = 4, 
-                 label.padding = unit(0.05, "lines"), 
-                 label.size = 0.0) +
+      geom_text_repel(data = rbind(data_first, data_second),
+                      aes(label = Year, x=GDP_Per_Capita, y = Value),
+                      vjust = 1) +
+      #geom_label(data = rbind(data_first, data_second), 
+      #           aes(label = Year, x=GDP_Per_Capita, y=Value), 
+      #           size = 4, 
+      #           label.padding = unit(0.05, "lines"), 
+      #           label.size = 0.0) +
       theme_light() 
   })
 }
 
 
-countries_slopegraph <- function(input, output, data){
-  output$slope <- renderPlot({
-    first_country = input$first_country_select
-    second_country = input$second_country_select
+countries_slopegraph_top <- function(input, output, data){
+  output$slopetop <- renderPlot({
     pollutant_tosubset = input$pollutant_country
     data <- subset(data, Variable == pollutant_tosubset)
     data <- subset(data, Year %in% c(1995, 2000, 2005, 2010, 2015))
@@ -189,21 +191,60 @@ countries_slopegraph <- function(input, output, data){
     st_geometry(sorted_countries_ascending) <- NULL
     
     topn <- input$slope_select
-    if(topn == "Top 5 Polluters"){
-      top_n <- sorted_countries[1:5,1] 
-    }else if(topn == "Top 10 Polluters"){
-      top_n <- sorted_countries[1:10,1]
-    }else if(topn == "Top 20 Polluters"){
-      top_n <- sorted_countries[1:20,1]
-    }else if(topn == "Bottom 5 Polluters"){
-      top_n <- sorted_countries_ascending[1:5,1] 
-    }else if(topn == "Bottom 10 Polluters"){
-      top_n <- sorted_countries_ascending[1:10,1]
-    }else if(topn == "Bottom 20 Polluters"){
-      top_n <- sorted_countries_ascending[1:20,1]
-    }
+    top_n <- sorted_countries[1:topn,1] 
     
-    data <- subset(data, Country %in% cbind(top_n, c(first_country, second_country)))
+    data <- subset(data, Country %in% top_n)
+    ggplot(data, aes(x = Year, y = Value, group = Country)) +
+      geom_line(aes(color = Country), size = 1) +
+      labs(x="Year", y="Pollution Value") +
+      geom_text_repel(data = data %>% filter(Year == 1995), 
+                      aes(label = Country) , 
+                      hjust = "left", 
+                      fontface = "bold", 
+                      size = 5, 
+                      nudge_x = -.45, 
+                      direction = "y") +
+      geom_text_repel(data = data %>% filter(Year == 2015), 
+                      aes(label = Country) , 
+                      hjust = "right", 
+                      fontface = "bold", 
+                      size = 5, 
+                      nudge_x = .5, 
+                      direction = "y") +
+      #theme_hc()+ scale_colour_hc() +
+      theme(legend.position = "none")
+    #      geom_label(aes(label = Value), 
+    #                 size = 4, 
+    #                 label.padding = unit(0.05, "lines"), 
+    #                 label.size = 0.0)
+  })
+}
+
+countries_slopegraph_bottom <- function(input, output, data){
+  output$slopebottom <- renderPlot({
+    pollutant_tosubset = input$pollutant_country
+    data <- subset(data, Variable == pollutant_tosubset)
+    data <- subset(data, Year %in% c(1995, 2000, 2005, 2010, 2015))
+    
+    na_countries <- subset(data, is.na(data$Value))
+    na_countries <- unique(na_countries$Country)
+    
+    data <- subset(data, !(Country %in% na_countries))
+    data <- subset(data, Value != 0)
+    
+    
+    tidy_data <- data[,c('Country', 'Value')]
+    averages <- aggregate(tidy_data[,2], list(tidy_data$Country), mean)
+    averages <- unique(averages)
+    sorted_countries <- averages[order(averages$Value, decreasing=TRUE), ]
+    sorted_countries_ascending <- averages[order(averages$Value, decreasing=FALSE), ]
+    st_geometry(sorted_countries) <- NULL
+    st_geometry(sorted_countries_ascending) <- NULL
+    
+    topn <- input$slope_select
+    top_n <- sorted_countries_ascending[1:topn,1]
+    
+    data <- subset(data, Country %in% top_n)
     ggplot(data, aes(x = Year, y = Value, group = Country)) +
       geom_line(aes(color = Country), size = 1) +
       labs(x="Year", y="Pollution Value") +
@@ -240,9 +281,11 @@ countries_factors <- function(input, output, data){
     second_country = input$second_country_select_1
     country_set = c(first_country, second_country)
     data_first <- subset(data, Country %in% country_set & Variable == "Mean population exposure to PM2.5")
-    ggplot(data_first, aes(x=Year, y=Value, group=Country)) +
-      geom_line(aes(color = Country), size = 1) +
-      labs(title="Mean population exposure to PM2.5")
+    data_first <- data_first %>% mutate(Mean.Exposure.PM2.5 = round(Value, digits = 2))
+    ggplot(data_first, aes(x=Year, y=Mean.Exposure.PM2.5)) +
+      geom_line(aes(color = Country), size = 0.5) +
+      labs(title="Mean population exposure to PM2.5", x = "Year", y = "Micrograms/m3") +
+      theme(legend.position = "none")
   }))
   
 }
@@ -257,9 +300,11 @@ countries_factors_second <- function(input, output, data){
     second_country = input$second_country_select_1
     country_set = c(first_country, second_country)
     data_first <- subset(data, Country %in% country_set & Variable == "Percentage of population exposed to more than 15 micrograms/m3")
-    ggplot(data_first, aes(x=Year, y=Value, group=Country)) +
-      geom_line(aes(color = Country), size = 1) +
-      labs(title="Percentage of population exposed to more than 15 micrograms/m3")
+    data_first <- data_first %>% mutate(Mean.Exposure.15m3 = round(Value, digits = 2))
+    ggplot(data_first, aes(x=Year, y=Mean.Exposure.15m3)) +
+      geom_line(aes(color = Country), size = 0.5) +
+      labs(title="% of population exposed to > 15 micrograms/m3", x="Year", y = "Percentage") +
+      theme(legend.position = "none")
   }))
   
 }
@@ -269,7 +314,8 @@ server <- function(input, output, session) {
   synced_maps(input, output, countries)
   countries_scatterplot(input, output, countries)
   countries_lineplot(input, output, countries)
-  countries_slopegraph(input, output, countries)
+  countries_slopegraph_top(input, output, countries)
+  countries_slopegraph_bottom(input, output, countries)
   countries_factors(input, output, countries)
   countries_factors_second(input, output, countries)
 }

@@ -98,8 +98,7 @@ ui <- dashboardPage(skin="purple",
                                   conditionalPanel(condition="input.mytabs == 'aqitimecomp'",
                                                    selectInput("pollutant_country", "Pollutant: ", variable_list),
                                                    selectInput("slope_select", "Top/Bottom N Countries: ", 
-                                                               c("Top 5 Polluters", "Top 10 Polluters", "Top 20 Polluters", 
-                                                                 "Bottom 5 Polluters", "Bottom 10 Polluters", "Bottom 20 Polluters"))
+                                                               c(5, 10, 15, 20))
                                                    ),
                                   conditionalPanel(condition="input.mytabs == 'factorcomp'", 
                                                    selectInput("first_country_select_1", "First Country: ", country_list, selected = "Australia"),
@@ -117,7 +116,7 @@ ui <- dashboardPage(skin="purple",
                                   column(offset = 1, width = 10, uiOutput("syncedmaps"))
                                 ),
                                 fluidRow(
-                                  column(offset = 1, width = 5, height = 1, h1("GDP Per Capita vs Pollutant Levels Per Country"))
+                                  column(offset = 1, width = 10, height = 1, h1("GDP Per Capita vs Pollutant Levels Per Country"))
                                 ),
                                 fluidRow(
                                   column(offset = 1, width = 6,  plotlyOutput("scatter", width = '40em', height = '30em'))
@@ -132,9 +131,13 @@ ui <- dashboardPage(skin="purple",
                         ),
                         tabItem(tabName="aqitimecomp",
                                 fluidRow(
-                                  column(width=5, height = 6, offset = 1,
-                                         h1("AQI Comparison over Time"),
-                                         plotOutput("slope", height = "60em")
+                                  column(width=5, height = 8, offset = 1,
+                                         h1("Top Polluters"),
+                                         plotOutput("slopetop")
+                                  ),
+                                  column(width=5, height = 8,
+                                         h1("Bottom Polluters"),
+                                         plotOutput("slopebottom")
                                   )
                                 )
                         ),
