@@ -171,7 +171,7 @@ countries_lineplot <- function(input, output, data){
 
 countries_slopegraph_top <- function(input, output, data){
   output$slopetop <- renderPlot({
-    pollutant_tosubset = input$pollutant_country
+    pollutant_tosubset = input$pollutant_country_1
     data <- subset(data, Variable == pollutant_tosubset)
     data <- subset(data, Year %in% c(1995, 2000, 2005, 2010, 2015))
     
@@ -222,7 +222,7 @@ countries_slopegraph_top <- function(input, output, data){
 
 countries_slopegraph_bottom <- function(input, output, data){
   output$slopebottom <- renderPlot({
-    pollutant_tosubset = input$pollutant_country
+    pollutant_tosubset = input$pollutant_country_1
     data <- subset(data, Variable == pollutant_tosubset)
     data <- subset(data, Year %in% c(1995, 2000, 2005, 2010, 2015))
     

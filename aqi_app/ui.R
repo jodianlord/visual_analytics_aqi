@@ -96,7 +96,7 @@ ui <- dashboardPage(skin="purple",
                                                    selectInput("second_country_select", "Second Country: ", country_list, selected = "Austria")
                                   ),
                                   conditionalPanel(condition="input.mytabs == 'aqitimecomp'",
-                                                   selectInput("pollutant_country", "Pollutant: ", variable_list),
+                                                   selectInput("pollutant_country_1", "Pollutant: ", variable_list),
                                                    selectInput("slope_select", "Top/Bottom N Countries: ", 
                                                                c(5, 10, 15, 20))
                                                    ),
