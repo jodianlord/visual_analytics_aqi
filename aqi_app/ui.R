@@ -110,6 +110,12 @@ ui <- dashboardPage(skin="purple",
                       tabItems(
                         tabItem(tabName='world',
                                 fluidRow(
+                                  column(offset = 1, width = 10, h1("World Overview"), 
+                                  p("This page provides a wide overview of how each countries' GDP per Capita relates to their air quality
+                                  on any given year. The map provides a geographical view of each measure while the scatterplot provides
+                                  a view of the economic and air quality indicators in relation to every other country in the world."))
+                                ),
+                                fluidRow(
                                   column(offset = 1, width = 5, height = 1, h1("AQI vs GDP Per Capita Worldwide"))
                                 ),
                                 fluidRow(
@@ -124,12 +130,22 @@ ui <- dashboardPage(skin="purple",
                         ),
                         tabItem(tabName="aqigdpcomp",
                                 fluidRow(
+                                  column(offset = 1, width = 10, h1("AQI vs GDP Comparison"), 
+                                  p("By selecting 2 countries to compare, this graph demonstrates how each country
+                                                                   developed its economy while managing their air quality at every turn. This comparison
+                                                                   allows you to see which country did a better job."))
+                                ),
+                                fluidRow(
                                   column(width = 5, height = 6, offset = 1, 
-                                         h1("AQI vs GDP Comparison"),
                                          plotOutput("compare"))
                                 )
                         ),
                         tabItem(tabName="aqitimecomp",
+                                fluidRow(
+                                  column(offset = 1, width = 10, h1("AQI over Time"), 
+                                         p("On selecting the top/bottom N countries, the 2 graphs demonstrate the best case and worst case scenarios
+                                           for managing air pollution."))
+                                ),
                                 fluidRow(
                                   column(width=5, height = 8, offset = 1,
                                          h1("Top Polluters"),
@@ -142,6 +158,13 @@ ui <- dashboardPage(skin="purple",
                                 )
                         ),
                         tabItem(tabName="factorcomp",
+                                fluidRow(
+                                  column(offset = 1, width = 10, h1("Pollution Factors Comparison"), 
+                                         p("After selecting 2 countries, the 2 graphs compare the year-on-year change in mean population
+                                           exposure to PM2.5 vs the percentage of the population exposed to more than 15 micrograms/m3. 
+                                           This shows how pollution affects each country unequally and to what extent this inequality
+                                           has changed over the years."))
+                                ),
                                 fluidRow(
                                   column(width = 5, height = 1, offset = 1,
                                          h1("AQI Factors over Time")
